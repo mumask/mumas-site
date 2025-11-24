@@ -5,7 +5,14 @@ body {
   overflow: hidden;
   background: #000;
 }
-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
 
 .container {
   position: relative;
@@ -17,7 +24,11 @@ canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -
   border-radius: 16px;
 }
 
-header { text-align: center; font-size: 1.5rem; margin-bottom: 20px; }
+header {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
 
 .accordion-item { background: #111; margin-bottom: 12px; border-radius: 10px; }
 .accordion-header { padding: 14px; cursor: pointer; display: flex; align-items: center; }
@@ -25,7 +36,13 @@ header { text-align: center; font-size: 1.5rem; margin-bottom: 20px; }
 .accordion-title { flex-grow: 1; font-weight: 600; }
 .accordion-arrow { transition: transform 0.3s; }
 .accordion-arrow.open { transform: rotate(90deg); }
-.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s, padding 0.3s; padding: 0 14px; background: #222; }
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s, padding 0.3s;
+  padding: 0 14px;
+  background: #222;
+}
 .accordion-content.open { padding: 12px 14px; max-height: 60px; }
 
 .btn-link {
@@ -37,6 +54,4 @@ header { text-align: center; font-size: 1.5rem; margin-bottom: 20px; }
   text-decoration: none;
   font-weight: 700;
 }
-.btn-link:hover {
-  background: #ff8a00;
-}
+.btn-link:hover { background: #ff8a00; }
