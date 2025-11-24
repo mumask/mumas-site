@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -8,10 +7,7 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
 
-  /* Reset */
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
   body {
     margin: 0;
     font-family: 'Comic Neue', cursive, Arial, sans-serif;
@@ -25,13 +21,8 @@
     align-items: flex-start;
     padding: 40px 20px;
   }
-  @keyframes backgroundShift {
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-  }
+  @keyframes backgroundShift { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
 
-  /* Container with dynamic background overlay for night */
   .container {
     width: 100%;
     max-width: 480px;
@@ -41,305 +32,146 @@
     padding: 30px 20px 40px 20px;
     position: relative;
   }
-  /* Night overlay */
-  .night {
-    animation: none !important;
-    background: linear-gradient(135deg, #001f3f, #003366);
-    color: #bbb !important;
-  }
+  .night { background: linear-gradient(135deg, #001f3f, #003366); color: #bbb !important; }
 
-  /* Header */
-  header {
-    font-size: 1.7rem;
-    font-weight: 700;
-    margin-bottom: 24px;
-    text-align: center;
-    color: #fff;
-  }
+  header { font-size: 1.7rem; font-weight: 700; margin-bottom: 24px; text-align: center; color: #fff; }
 
-  /* Clock */
-  #clock {
-    position: fixed;
-    top: 16px;
-    right: 24px;
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: 600;
-    color: #ddd;
-    font-size: 1.1rem;
-    user-select: none;
-  }
+  #clock { position: fixed; top: 16px; right: 24px; font-family: 'Courier New', Courier, monospace; font-weight: 600; color: #ddd; font-size: 1.1rem; user-select: none; }
 
-  /* Accordion */
-  .accordion-item {
-    background: #111;
-    border-radius: 10px;
-    margin-bottom: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.7);
-  }
+  .accordion-item { background: #111; border-radius: 10px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.7); }
+  .accordion-header { cursor: pointer; padding: 14px 20px; display: flex; align-items: center; user-select: none; transition: background-color 0.25s ease; }
+  .accordion-header:hover { background-color: #222; }
+  .accordion-header img { width: 28px; height: 28px; margin-right: 12px; filter: drop-shadow(0 0 1px black); flex-shrink: 0; }
+  .accordion-title { flex-grow: 1; font-weight: 600; font-size: 1.1rem; color: #eee; }
+  .accordion-arrow { transition: transform 0.3s ease; color: #ccc; }
+  .accordion-arrow.open { transform: rotate(90deg); }
+  .accordion-content { max-height: 0; overflow: hidden; padding: 0 20px; background: #222; transition: max-height 0.3s ease, padding 0.3s ease; }
+  .accordion-content.open { padding: 12px 20px 16px 20px; max-height: 60px; }
 
-  .accordion-header {
-    cursor: pointer;
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    user-select: none;
-    transition: background-color 0.25s ease;
-  }
-  .accordion-header:hover {
-    background-color: #222;
-  }
+  .btn-link { display: inline-block; padding: 8px 16px; background: #e52e71; border-radius: 8px; color: #fff; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: background-color 0.3s ease; box-shadow: 0 2px 8px #e52e71aa; }
+  .btn-link:hover { background-color: #ff8a00; box-shadow: 0 3px 10px #ff8a00cc; }
 
-  .accordion-header img {
-    width: 28px;
-    height: 28px;
-    margin-right: 12px;
-    filter: drop-shadow(0 0 1px black);
-    flex-shrink: 0;
-  }
-
-  .accordion-title {
-    flex-grow: 1;
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: #eee;
-  }
-
-  .accordion-arrow {
-    transition: transform 0.3s ease;
-    color: #ccc;
-  }
-
-  .accordion-arrow.open {
-    transform: rotate(90deg);
-  }
-
-  .accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    padding: 0 20px;
-    background: #222;
-    color: #ddd;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    transition: max-height 0.3s ease, padding 0.3s ease;
-  }
-
-  .accordion-content.open {
-    padding: 12px 20px 16px 20px;
-    max-height: 150px; /* enough to show content */
-  }
-
-  .btn-link {
-    margin-top: 8px;
-    display: inline-block;
-    padding: 8px 16px;
-    background: #e52e71;
-    border-radius: 8px;
-    color: #fff;
-    font-weight: 700;
-    font-size: 0.95rem;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 2px 8px #e52e71aa;
-  }
-  .btn-link:hover {
-    background-color: #ff8a00;
-    box-shadow: 0 3px 10px #ff8a00cc;
-  }
-
-  @media (max-width: 480px) {
-    body {
-      padding: 20px 10px;
-    }
-    .container {
-      padding: 20px 15px 30px 15px;
-    }
-  }
+  @media (max-width: 480px) { body { padding: 20px 10px; } .container { padding: 20px 15px 30px 15px; } }
 </style>
 </head>
 <body>
-  <div id="clock">--:--:--</div>
-  <div class="container" id="app-container">
-    <header>Olá, Murilo! Qual desses apps você irá utilizar hoje?</header>
+<div id="clock">--:--:--</div>
+<div class="container" id="app-container">
+  <header>Olá, Murilo! Qual desses apps você irá utilizar hoje?</header>
 
-    <div class="accordion-item">
-      <div class="accordion-header" tabindex="0">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" />
-        <span class="accordion-title">WhatsApp</span>
-        <span class="accordion-arrow">&#9654;</span>
-      </div>
-      <div class="accordion-content">
-        Converse com seus amigos e familiares pelo WhatsApp web.
-        <br />
-        <a class="btn-link" href="https://web.whatsapp.com" target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
-      </div>
+  <!-- WhatsApp -->
+  <div class="accordion-item">
+    <div class="accordion-header" tabindex="0">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" />
+      <span class="accordion-title">WhatsApp</span>
+      <span class="accordion-arrow">&#9654;</span>
     </div>
-
-    <div class="accordion-item">
-      <div class="accordion-header" tabindex="0">
-        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046120.png" alt="TikTok" />
-        <span class="accordion-title">TikTok</span>
-        <span class="accordion-arrow">&#9654;</span>
-      </div>
-      <div class="accordion-content">
-        Assista vídeos curtos e divertidos no TikTok.
-        <br />
-        <a class="btn-link" href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer">Abrir TikTok</a>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <div class="accordion-header" tabindex="0">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" />
-        <span class="accordion-title">Instagram</span>
-        <span class="accordion-arrow">&#9654;</span>
-      </div>
-      <div class="accordion-content">
-        Veja fotos e stories dos seus amigos no Instagram.
-        <br />
-        <a class="btn-link" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">Abrir Instagram</a>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <div class="accordion-header" tabindex="0">
-        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" />
-        <span class="accordion-title">YouTube</span>
-        <span class="accordion-arrow">&#9654;</span>
-      </div>
-      <div class="accordion-content">
-        Assista vídeos de qualquer assunto no YouTube.
-        <br />
-        <a class="btn-link" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">Abrir YouTube</a>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <div class="accordion-header" tabindex="0">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="ChatGPT" style="filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(110%) contrast(101%);width:28px;height:28px;margin-right:12px;flex-shrink:0;" />
-        <span class="accordion-title">ChatGPT</span>
-        <span class="accordion-arrow">&#9654;</span>
-      </div>
-      <div class="accordion-content">
-        Converse e tire dúvidas com o ChatGPT.
-        <br />
-        <a class="btn-link" href="https://chat.openai.com" target="_blank" rel="noopener noreferrer">Abrir ChatGPT</a>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <div class="accordion-header" tabindex="0">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111624.png" alt="Spotify" />
-        <span class="accordion-title">Spotify</span>
-        <span class="accordion-arrow">&#9654;</span>
-      </div>
-      <div class="accordion-content">
-        Ouça suas músicas favoritas no Spotify.
-        <br />
-        <a class="btn-link" href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">Abrir Spotify</a>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <div class="accordion-header" tabindex="0">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord" />
-        <span class="accordion-title">Discord</span>
-        <span class="accordion-arrow">&#9654;</span>
-      </div>
-      <div class="accordion-content">
-        Converse em servidores e canais no Discord.
-        <br />
-        <a class="btn-link" href="https://discord.com/app" target="_blank" rel="noopener noreferrer">Abrir Discord</a>
-      </div>
+    <div class="accordion-content">
+      <a class="btn-link" href="https://web.whatsapp.com" target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
     </div>
   </div>
 
+  <!-- TikTok -->
+  <div class="accordion-item">
+    <div class="accordion-header" tabindex="0">
+      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046120.png" alt="TikTok" />
+      <span class="accordion-title">TikTok</span>
+      <span class="accordion-arrow">&#9654;</span>
+    </div>
+    <div class="accordion-content">
+      <a class="btn-link" href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer">Abrir TikTok</a>
+    </div>
+  </div>
+
+  <!-- Instagram -->
+  <div class="accordion-item">
+    <div class="accordion-header" tabindex="0">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" />
+      <span class="accordion-title">Instagram</span>
+      <span class="accordion-arrow">&#9654;</span>
+    </div>
+    <div class="accordion-content">
+      <a class="btn-link" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">Abrir Instagram</a>
+    </div>
+  </div>
+
+  <!-- YouTube -->
+  <div class="accordion-item">
+    <div class="accordion-header" tabindex="0">
+      <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" />
+      <span class="accordion-title">YouTube</span>
+      <span class="accordion-arrow">&#9654;</span>
+    </div>
+    <div class="accordion-content">
+      <a class="btn-link" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">Abrir YouTube</a>
+    </div>
+  </div>
+
+  <!-- ChatGPT -->
+  <div class="accordion-item">
+    <div class="accordion-header" tabindex="0">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="ChatGPT" style="filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(110%) contrast(101%); width:28px; height:28px; margin-right:12px; flex-shrink:0;" />
+      <span class="accordion-title">ChatGPT</span>
+      <span class="accordion-arrow">&#9654;</span>
+    </div>
+    <div class="accordion-content">
+      <a class="btn-link" href="https://chat.openai.com" target="_blank" rel="noopener noreferrer">Abrir ChatGPT</a>
+    </div>
+  </div>
+
+  <!-- Spotify -->
+  <div class="accordion-item">
+    <div class="accordion-header" tabindex="0">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111624.png" alt="Spotify" />
+      <span class="accordion-title">Spotify</span>
+      <span class="accordion-arrow">&#9654;</span>
+    </div>
+    <div class="accordion-content">
+      <a class="btn-link" href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">Abrir Spotify</a>
+    </div>
+  </div>
+
+  <!-- Discord -->
+  <div class="accordion-item">
+    <div class="accordion-header" tabindex="0">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord" />
+      <span class="accordion-title">Discord</span>
+      <span class="accordion-arrow">&#9654;</span>
+    </div>
+    <div class="accordion-content">
+      <a class="btn-link" href="https://discord.com/app" target="_blank" rel="noopener noreferrer">Abrir Discord</a>
+    </div>
+  </div>
+
+</div>
+
 <script>
-  // Clock update
-  function updateClock() {
-    const clock = document.getElementById('clock');
-    const now = new Date();
+function updateClock() {
+  const clock = document.getElementById('clock');
+  const now = new Date();
+  let h=now.getHours(), m=now.getMinutes(), s=now.getSeconds();
+  h=h<10?'0'+h:h; m=m<10?'0'+m:m; s=s<10?'0'+s:s;
+  clock.textContent=`${h}:${m}:${s}`;
+  const container=document.getElementById('app-container');
+  if(h>=6 && h<18){ container.classList.remove('night'); document.body.style.background='linear-gradient(135deg, #ff8a00, #e52e71)'; }
+  else{ container.classList.add('night'); document.body.style.background='linear-gradient(135deg, #001f3f, #003366)'; }
+}
+setInterval(updateClock,1000); updateClock();
 
-    // Format HH:MM:SS
-    let h = now.getHours();
-    let m = now.getMinutes();
-    let s = now.getSeconds();
-
-    h = h < 10 ? '0' + h : h;
-    m = m < 10 ? '0' + m : m;
-    s = s < 10 ? '0' + s : s;
-
-    clock.textContent = `${h}:${m}:${s}`;
-
-    // Change background color gradient based on time (day: 6-18, night: 18-6)
-    const container = document.getElementById('app-container');
-    if(h >= 6 && h < 18) {
-      // Day: warm gradient
-      document.body.style.animation = 'backgroundShiftDay 30s ease infinite';
-      container.classList.remove('night');
-      document.body.style.background = 'linear-gradient(135deg, #ff8a00, #e52e71)';
-      document.body.style.backgroundSize = '600% 600%';
-    } else {
-      // Night: cool gradient
-      document.body.style.animation = 'backgroundShiftNight 30s ease infinite';
-      container.classList.add('night');
-      document.body.style.background = 'linear-gradient(135deg, #001f3f, #003366)';
-      document.body.style.backgroundSize = '600% 600%';
-    }
-  }
-
-  setInterval(updateClock, 1000);
-  updateClock();
-
-  // Accordion functionality
-  const accordionHeaders = document.querySelectorAll('.accordion-header');
-  accordionHeaders.forEach(header => {
-    header.addEventListener('click', () => {
-      const content = header.nextElementSibling;
-      const arrow = header.querySelector('.accordion-arrow');
-      const isOpen = content.classList.contains('open');
-
-      // Close all others
-      document.querySelectorAll('.accordion-content.open').forEach(openContent => {
-        if(openContent !== content) {
-          openContent.classList.remove('open');
-          openContent.previousElementSibling.querySelector('.accordion-arrow').classList.remove('open');
-        }
-      });
-
-      if(isOpen) {
-        content.classList.remove('open');
-        arrow.classList.remove('open');
-      } else {
-        content.classList.add('open');
-        arrow.classList.add('open');
-      }
+const accordionHeaders=document.querySelectorAll('.accordion-header');
+accordionHeaders.forEach(header=>{
+  header.addEventListener('click',()=>{
+    const content=header.nextElementSibling;
+    const arrow=header.querySelector('.accordion-arrow');
+    const isOpen=content.classList.contains('open');
+    document.querySelectorAll('.accordion-content.open').forEach(openContent=>{
+      if(openContent!==content){ openContent.classList.remove('open'); openContent.previousElementSibling.querySelector('.accordion-arrow').classList.remove('open'); }
     });
-    header.addEventListener('keydown', e => {
-      if(e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        header.click();
-      }
-    });
+    if(isOpen){ content.classList.remove('open'); arrow.classList.remove('open'); }
+    else{ content.classList.add('open'); arrow.classList.add('open'); }
   });
-
-  // CSS animations for background gradients day/night
-  const styleSheet = document.createElement("style");
-  styleSheet.type = "text/css";
-  styleSheet.innerText = `
-    @keyframes backgroundShiftDay {
-      0%{background-position:0% 50%;}
-      50%{background-position:100% 50%;}
-      100%{background-position:0% 50%;}
-    }
-    @keyframes backgroundShiftNight {
-      0%{background-position:0% 50%;}
-      50%{background-position:100% 50%;}
-      100%{background-position:0% 50%;}
-    }
-  `;
-  document.head.appendChild(styleSheet);
+  header.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); header.click(); } });
+});
 </script>
 </body>
 </html>
