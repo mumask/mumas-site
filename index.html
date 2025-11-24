@@ -5,23 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Apps do Murilo</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; }
 body {
-  font-family:'Arial', 'Verdana', sans-serif;
+  margin:0;
+  font-family:Arial, sans-serif;
+  color:#eee;
   min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:flex-start;
   padding:40px 20px;
-  color:#eee;
   overflow:hidden;
-  position:relative;
+  background:#000;
 }
-
-/* Canvas de fundo */
 canvas { position:fixed; top:0; left:0; z-index:-1; }
 
-/* Container */
 .container {
   width:100%;
   max-width:480px;
@@ -49,7 +46,6 @@ header {
   user-select:none;
 }
 
-/* Accordion */
 .accordion-item { background:#111; border-radius:10px; margin-bottom:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.7); }
 .accordion-header { cursor:pointer; padding:14px 20px; display:flex; align-items:center; transition:background-color 0.25s ease; }
 .accordion-header:hover { background-color:#222; }
@@ -67,12 +63,11 @@ header {
 </style>
 </head>
 <body>
-<canvas id="background"></canvas>
+<canvas id="bg"></canvas>
 <div id="clock">--:--:--</div>
 <div class="container">
 <header>Olá, Murilo! Qual desses apps você irá utilizar hoje?</header>
 
-<!-- Apps -->
 <div class="accordion-item">
   <div class="accordion-header" tabindex="0">
     <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
@@ -164,81 +159,57 @@ document.querySelectorAll('.accordion-header').forEach(header=>{
   header.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); header.click(); } });
 });
 
-// Fundo líquido interativo com partículas
-const canvas=document.getElementById('background');
+// Fluids v2 estilo
+const canvas=document.getElementById('bg');
 const ctx=canvas.getContext('2d');
 let w=canvas.width=window.innerWidth;
 let h=canvas.height=window.innerHeight;
-
-let mouseX=w/2;
-let mouseY=h/2;
+let mouse={x:w/2,y:h/2};
 
 window.addEventListener('resize',()=>{ w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; });
-window.addEventListener('mousemove',e=>{ mouseX=e.clientX; mouseY=e.clientY; });
+window.addEventListener('mousemove',e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
 
-const waves=[
-  {amplitude:30,wavelength:300,speed:0.002,phase:0,color1:'#ff8a00',color2:'#e52e71'},
-  {amplitude:20,wavelength:200,speed:0.0015,phase:0,color1:'#00bfff',color2:'#0066ff'},
-  {amplitude:15,wavelength:150,speed:0.001,phase:0,color1:'#00ffaa',color2:'#00cc88'}
-];
-
-// Partículas
 const particles=[];
-for(let i=0;i<100;i++){
-  particles.push({
-    x:Math.random()*w,
-    y:Math.random()*h,
-    radius:Math.random()*2+1,
-    speed:Math.random()*0.5+0.2
-  });
+for(let i=0;i<150;i++){
+  particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,speed:Math.random()*0.5+0.2});
 }
 
-function drawWave(wave,time){
-  const gradient=ctx.createLinearGradient(0,0,w,h);
-  gradient.addColorStop(0,wave.color1);
-  gradient.addColorStop(1,wave.color2);
-  ctx.fillStyle=gradient;
-  ctx.beginPath();
-  ctx.moveTo(0,h/2);
-  for(let x=0;x<=w;x+=5){
-    const y=Math.sin((x/wave.wavelength*2*Math.PI)+wave.phase+time*wave.speed)
-            * wave.amplitude
-            + h/2
-            + (mouseY-h/2)/20;
-    ctx.lineTo(x,y);
-  }
-  ctx.lineTo(w,h);
-  ctx.lineTo(0,h);
-  ctx.closePath();
-  ctx.fill();
-}
-
-function drawParticles(){
-  particles.forEach(p=>{
-    const dx=mouseX-p.x;
-    const dy=mouseY-p.y;
-    const dist=Math.sqrt(dx*dx+dy*dy);
-    if(dist<150){
-      p.x -= dx*0.002;
-      p.y -= dy*0.002;
-    }
-    p.y += p.speed;
-    if(p.y>h) p.y=0;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
-    ctx.fillStyle='rgba(255,255,255,0.8)';
-    ctx.fill();
-  });
-}
-
-function animate(){
+function drawFluid(time){
   ctx.clearRect(0,0,w,h);
-  const time=Date.now();
-  waves.forEach(wave=>drawWave(wave,time));
-  drawParticles();
-  requestAnimationFrame(animate);
+  // ondas simples tipo fluid
+  for(let i=0;i<h;i+=4){
+    const grad=ctx.createLinearGradient(0,i,w,i+4);
+    const color1=`hsl(${(i+time*0.05)%360},80%,50%)`;
+    const color2=`hsl(${(i+time*0.05+40)%360},80%,50%)`;
+    grad.addColorStop(0,color1);
+    grad.addColorStop(1,color2);
+    ctx.fillStyle=grad;
+    ctx.beginPath();
+    for(let x=0;x<w;x+=5){
+      const y=i+Math.sin((x*0.01)+(time*0.002)+(i*0.05))*10;
+      ctx.lineTo(x,y);
+    }
+    ctx.lineTo(w,h);
+    ctx.lineTo(0,h);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // partículas
+  particles.forEach(p=>{
+    // cor baseada na posição
+    const hue=(p.x+p.y+time*0.05)%360;
+    ctx.fillStyle=`hsl(${hue},80%,60%)`;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+    // movimento
+    p.y+=p.speed;
+    if(p.y>h) p.y=0;
+  });
+  requestAnimationFrame(()=>drawFluid(time+1));
 }
-animate();
+drawFluid(0);
 </script>
 </body>
 </html>
