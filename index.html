@@ -23,26 +23,27 @@
       margin-bottom: 40px;
       font-size: 2.5rem;
       text-shadow: 0 0 10px #fff3;
+      text-align: center;
     }
 
-    /* ======= Container de Apps ======= */
+    /* ======= Lista Vertical de Apps ======= */
     .apps {
       display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-direction: column;
+      gap: 25px;
+      align-items: center;
     }
 
     .apps a img {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       transition: transform 0.2s, box-shadow 0.2s;
       border-radius: 15%;
     }
 
     .apps a img:hover {
       transform: scale(1.2);
-      box-shadow: 0 0 15px #fff7;
+      box-shadow: 0 0 20px #fff7;
     }
 
     /* ======= Canvas de Partículas ======= */
@@ -55,27 +56,15 @@
   </style>
 </head>
 <body>
-  <h1 id="greeting">Olá!</h1>
+  <h1 id="greeting">Olá, Murilo!</h1>
 
   <div class="apps">
-    <a href="https://web.whatsapp.com" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-    </a>
-    <a href="https://www.tiktok.com" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" alt="TikTok">
-    </a>
-    <a href="https://www.instagram.com" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram">
-    </a>
-    <a href="https://discord.com" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord">
-    </a>
-    <a href="https://www.spotify.com" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify">
-    </a>
-    <a href="https://www.youtube.com" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
-    </a>
+    <a href="https://web.whatsapp.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"></a>
+    <a href="https://www.tiktok.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" alt="TikTok"></a>
+    <a href="https://www.instagram.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram"></a>
+    <a href="https://discord.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord"></a>
+    <a href="https://www.spotify.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify"></a>
+    <a href="https://www.youtube.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"></a>
   </div>
 
   <canvas id="particles"></canvas>
@@ -84,11 +73,11 @@
     // ======= Saudação Dinâmica =======
     const greeting = document.getElementById('greeting');
     const hour = new Date().getHours();
-    if(hour >= 5 && hour < 12) greeting.textContent = 'Bom dia!';
-    else if(hour >= 12 && hour < 18) greeting.textContent = 'Boa tarde!';
-    else greeting.textContent = 'Boa noite!';
+    if(hour >= 5 && hour < 12) greeting.textContent = 'Bom dia, Murilo!';
+    else if(hour >= 12 && hour < 18) greeting.textContent = 'Boa tarde, Murilo!';
+    else greeting.textContent = 'Boa noite, Murilo!';
 
-    // ======= Partículas Interativas =======
+    // ======= Partículas Interativas com Mouse =======
     const canvas = document.getElementById('particles');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -96,9 +85,11 @@
 
     const particles = [];
     const colors = ['#ff4d4d', '#4dff88', '#4d88ff', '#ffdd4d'];
+    const particleCount = 120;
+    const mouse = { x: null, y: null, radius: 150 };
 
     function createParticles() {
-      for(let i = 0; i < 120; i++) {
+      for(let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
@@ -113,10 +104,22 @@
     function drawParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for(let p of particles){
+        // Interação com mouse
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const distance = Math.sqrt(dx*dx + dy*dy);
+        if(distance < mouse.radius){
+          const angle = Math.atan2(dy, dx);
+          const force = (mouse.radius - distance) / mouse.radius;
+          p.x -= Math.cos(angle) * force * 3;
+          p.y -= Math.sin(angle) * force * 3;
+        }
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
         ctx.fill();
+
         p.x += p.dx;
         p.y += p.dy;
 
@@ -129,7 +132,11 @@
     createParticles();
     drawParticles();
 
-    // Ajuste ao redimensionar a tela
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
