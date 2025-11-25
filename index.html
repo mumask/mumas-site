@@ -35,6 +35,51 @@
       z-index: 0;
     }
     
+    /* Controles do Jogo */
+    .game-controls {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: all;
+    }
+    
+    .control-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    
+    .control-btn {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: bold;
+      user-select: none;
+    }
+    
+    .control-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+    
+    .control-btn:active {
+      transform: scale(0.95);
+    }
+    
     /* Player de Música */
     .music-player {
       position: fixed;
@@ -358,14 +403,26 @@
     </div>
   </div>
   
+  <!-- Controles do Jogo -->
+  <div class="game-controls">
+    <div class="control-row">
+      <div class="control-btn" id="jumpBtn">↑</div>
+    </div>
+    <div class="control-row">
+      <div class="control-btn" id="leftBtn">←</div>
+      <div class="control-btn" id="rightBtn">→</div>
+    </div>
+  </div>
+  
   <!-- Player de Música -->
   <div class="music-player" id="musicPlayer">
     <div class="vinyl" id="vinyl"></div>
     <img src="https://i.scdn.co/image/ab67616d0000b273bc5a6e8bdc4d7c94c6b59aca" alt="Minecraft Album" class="album-cover">
   </div>
   
-  <audio id="audioPlayer" loop>
-    <source src="https://archive.org/download/MinecraftVolumeBeta/Minecraft%20-%20Volume%20Beta%20-%2011%20Mice%20on%20Venus.mp3" type="audio/mpeg">
+  <audio id="audioPlayer" loop preload="auto">
+    <source src="https://archive.org/download/Minecraft_OST/Mice%20On%20Venus.mp3" type="audio/mpeg">
+    Seu navegador não suporta o elemento de áudio.
   </audio>
   
   <div class="container">
@@ -535,7 +592,166 @@
       }
     }
     
+    // ======= Sistema de Jogo de Plataforma =======
+    class Platform {
+      constructor(x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = fluid.colors[Math.floor(Math.random() * fluid.colors.length)];
+      }
+      
+      draw() {
+        ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.6)`;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.strokeStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 1)`;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(this.x, this.y, this.width, this.height);
+      }
+    }
+    
+    class Player {
+      constructor() {
+        this.width = 30;
+        this.height = 40;
+        this.x = 100;
+        this.y = height - 200;
+        this.velocityX = 0;
+        this.velocityY = 0;
+        this.speed = 5;
+        this.jumpPower = 12;
+        this.gravity = 0.5;
+        this.onGround = false;
+        this.facingRight = true;
+      }
+      
+      update(platforms) {
+        // Aplicar gravidade
+        this.velocityY += this.gravity;
+        
+        // Atualizar posição
+        this.x += this.velocityX;
+        this.y += this.velocityY;
+        
+        // Atrito
+        this.velocityX *= 0.9;
+        
+        // Limites da tela
+        if(this.x < 0) this.x = 0;
+        if(this.x + this.width > width) this.x = width - this.width;
+        
+        // Chão
+        this.onGround = false;
+        if(this.y + this.height >= height) {
+          this.y = height - this.height;
+          this.velocityY = 0;
+          this.onGround = true;
+        }
+        
+        // Colisão com plataformas
+        platforms.forEach(platform => {
+          if(this.x < platform.x + platform.width &&
+             this.x + this.width > platform.x &&
+             this.y < platform.y + platform.height &&
+             this.y + this.height > platform.y) {
+            
+            // Colisão por cima
+            if(this.velocityY > 0 && this.y + this.height - this.velocityY <= platform.y) {
+              this.y = platform.y - this.height;
+              this.velocityY = 0;
+              this.onGround = true;
+            }
+          }
+        });
+      }
+      
+      draw() {
+        // Corpo
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(this.x + 5, this.y, 20, 25);
+        
+        // Cabeça
+        ctx.fillStyle = '#ffd1a3';
+        ctx.fillRect(this.x + 7, this.y - 8, 16, 10);
+        
+        // Olhos
+        ctx.fillStyle = '#000';
+        if(this.facingRight) {
+          ctx.fillRect(this.x + 15, this.y - 5, 3, 3);
+        } else {
+          ctx.fillRect(this.x + 12, this.y - 5, 3, 3);
+        }
+        
+        // Pernas
+        ctx.fillStyle = '#4169e1';
+        ctx.fillRect(this.x + 8, this.y + 25, 6, 15);
+        ctx.fillRect(this.x + 16, this.y + 25, 6, 15);
+      }
+      
+      moveLeft() {
+        this.velocityX = -this.speed;
+        this.facingRight = false;
+      }
+      
+      moveRight() {
+        this.velocityX = this.speed;
+        this.facingRight = true;
+      }
+      
+      jump() {
+        if(this.onGround) {
+          this.velocityY = -this.jumpPower;
+        }
+      }
+    }
+    
     const fluid = new FluidSimulation();
+    const player = new Player();
+    
+    // Criar plataformas baseadas no tamanho da tela
+    function createPlatforms() {
+      return [
+        new Platform(150, height - 150, 200, 20),
+        new Platform(450, height - 250, 180, 20),
+        new Platform(80, height - 350, 150, 20),
+        new Platform(350, height - 450, 200, 20),
+        new Platform(600, height - 200, 160, 20),
+        new Platform(250, height - 550, 180, 20),
+        new Platform(550, height - 400, 140, 20)
+      ];
+    }
+    
+    let platforms = createPlatforms();
+    
+    // Controles do teclado
+    const keys = {};
+    
+    window.addEventListener('keydown', (e) => {
+      keys[e.key] = true;
+      
+      if(e.key === 'ArrowUp' || e.key === ' ' || e.key === 'w') {
+        player.jump();
+      }
+    });
+    
+    window.addEventListener('keyup', (e) => {
+      keys[e.key] = false;
+    });
+    
+    // Controles touch
+    document.getElementById('leftBtn').addEventListener('mousedown', () => keys['ArrowLeft'] = true);
+    document.getElementById('leftBtn').addEventListener('mouseup', () => keys['ArrowLeft'] = false);
+    document.getElementById('leftBtn').addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowLeft'] = true; });
+    document.getElementById('leftBtn').addEventListener('touchend', (e) => { e.preventDefault(); keys['ArrowLeft'] = false; });
+    
+    document.getElementById('rightBtn').addEventListener('mousedown', () => keys['ArrowRight'] = true);
+    document.getElementById('rightBtn').addEventListener('mouseup', () => keys['ArrowRight'] = false);
+    document.getElementById('rightBtn').addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowRight'] = true; });
+    document.getElementById('rightBtn').addEventListener('touchend', (e) => { e.preventDefault(); keys['ArrowRight'] = false; });
+    
+    document.getElementById('jumpBtn').addEventListener('click', () => player.jump());
+    document.getElementById('jumpBtn').addEventListener('touchstart', (e) => { e.preventDefault(); player.jump(); });
     
     // Controle de áudio
     const audio = document.getElementById('audioPlayer');
@@ -549,17 +765,23 @@
         audio.pause();
         vinyl.classList.remove('playing');
         clearInterval(noteInterval);
+        isPlaying = false;
       } else {
-        audio.play();
-        vinyl.classList.add('playing');
-        // Criar notas musicais periodicamente
-        noteInterval = setInterval(() => {
-          if(Math.random() > 0.3) {
-            fluid.createMusicNote();
-          }
-        }, 300);
+        // Garantir que o áudio toque
+        audio.play().then(() => {
+          vinyl.classList.add('playing');
+          isPlaying = true;
+          // Criar notas musicais periodicamente
+          noteInterval = setInterval(() => {
+            if(Math.random() > 0.3) {
+              fluid.createMusicNote();
+            }
+          }, 300);
+        }).catch(err => {
+          console.log('Erro ao tocar áudio:', err);
+          alert('Clique novamente para tocar a música!');
+        });
       }
-      isPlaying = !isPlaying;
     }
     
     musicPlayer.addEventListener('click', togglePlay);
@@ -586,8 +808,23 @@
     }, { passive: false });
     
     function animate() {
+      // Controles contínuos
+      if(keys['ArrowLeft'] || keys['a']) player.moveLeft();
+      if(keys['ArrowRight'] || keys['d']) player.moveRight();
+      
+      // Atualizar jogo
+      player.update(platforms);
+      
+      // Atualizar fluido
       fluid.update();
       fluid.draw();
+      
+      // Desenhar plataformas
+      platforms.forEach(p => p.draw());
+      
+      // Desenhar jogador
+      player.draw();
+      
       requestAnimationFrame(animate);
     }
     
@@ -601,6 +838,8 @@
     window.addEventListener('resize', () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
+      platforms = createPlatforms();
+      player.y = height - 200; // Reposicionar jogador
     });
   </script>
 </body>
