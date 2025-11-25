@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meus Apps</title>
   <style>
-    /* ======= Estilo Geral ======= */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -21,7 +20,7 @@
 
     h1 {
       margin-bottom: 40px;
-      font-size: 2.5rem;
+      font-size: 2rem;
       text-shadow: 0 0 10px #fff3;
       text-align: center;
     }
@@ -30,23 +29,32 @@
     .apps {
       display: flex;
       flex-direction: column;
-      gap: 25px;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .app-item {
+      display: flex;
       align-items: center;
+      gap: 15px;
+      cursor: pointer;
+      transition: transform 0.2s;
     }
 
-    .apps a img {
-      width: 100px;
-      height: 100px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      border-radius: 15%;
+    .app-item:hover {
+      transform: scale(1.05);
     }
 
-    .apps a img:hover {
-      transform: scale(1.2);
-      box-shadow: 0 0 20px #fff7;
+    .app-item img {
+      width: 50px;
+      height: 50px;
+      border-radius: 12%;
     }
 
-    /* ======= Canvas de Partículas ======= */
+    .app-name {
+      font-size: 1.2rem;
+    }
+
     canvas {
       position: fixed;
       top: 0;
@@ -59,12 +67,30 @@
   <h1 id="greeting">Olá, Murilo!</h1>
 
   <div class="apps">
-    <a href="https://web.whatsapp.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"></a>
-    <a href="https://www.tiktok.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" alt="TikTok"></a>
-    <a href="https://www.instagram.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram"></a>
-    <a href="https://discord.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord"></a>
-    <a href="https://www.spotify.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify"></a>
-    <a href="https://www.youtube.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"></a>
+    <a href="https://web.whatsapp.com" target="_blank" class="app-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+      <span class="app-name">WhatsApp</span>
+    </a>
+    <a href="https://www.tiktok.com" target="_blank" class="app-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" alt="TikTok">
+      <span class="app-name">TikTok</span>
+    </a>
+    <a href="https://www.instagram.com" target="_blank" class="app-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram">
+      <span class="app-name">Instagram</span>
+    </a>
+    <a href="https://discord.com" target="_blank" class="app-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord">
+      <span class="app-name">Discord</span>
+    </a>
+    <a href="https://www.spotify.com" target="_blank" class="app-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify">
+      <span class="app-name">Spotify</span>
+    </a>
+    <a href="https://www.youtube.com" target="_blank" class="app-item">
+      <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
+      <span class="app-name">YouTube</span>
+    </a>
   </div>
 
   <canvas id="particles"></canvas>
