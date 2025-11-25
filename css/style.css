@@ -53,3 +53,10 @@ header {
 .btn-link:hover { background-color:#ff8a00; box-shadow:0 3px 10px #ff8a00cc; }
 
 @media(max-width:480px){ body{padding:20px 10px;} .container{padding:20px 15px 30px 15px;} }
+
+.accordion-header:hover img {
+  transform: scale(1.2);
+  transition: transform 0.3s ease, filter 0.3s ease;
+  filter: drop-shadow(0 0 8px #ff8a00);
+}
+
