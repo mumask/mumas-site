@@ -5,97 +5,51 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Apps do Murilo — Hub</title>
   <meta name="description" content="Hub minimalista do Murilo: links rápidos para WhatsApp, TikTok, Instagram, YouTube, Discord e Spotify." />
-  <meta name="theme-color" content="#0b0b0b" />
-
+  <meta name="theme-color" content="#050505" />
   <style>
-    /* ======================
-       Theme variables
-       Dark minimalista
-       ====================== */
     :root{
-      --bg: #050505;
-      --surface: rgba(255,255,255,0.03);
-      --muted: #bfbfbf;
-      --accent: #ef476f; /* accent para botões */
-      --glass: rgba(255,255,255,0.02);
-      --focus: 0 0 0 4px rgba(239,71,111,0.12);
-      --radius: 14px;
-      --shadow: 0 6px 24px rgba(2,6,23,0.7);
-      --max-width: 520px;
+      --bg:#050505; --surface:rgba(255,255,255,0.02); --muted:#bfbfbf; --accent:#ef476f;
+      --glass:rgba(255,255,255,0.02); --focus:0 0 0 4px rgba(239,71,111,0.12);
+      --radius:14px; --max-width:520px;
       color-scheme: dark;
     }
-
-    /* Light fallback if user prefers light theme */
     @media (prefers-color-scheme: light){
-      :root{
-        --bg: #f6f7fb;
-        --surface: rgba(0,0,0,0.04);
-        --muted: #3b3b3b;
-        --accent: #0b6cff;
-        --glass: rgba(0,0,0,0.03);
-        --focus: 0 0 0 4px rgba(11,108,255,0.12);
-        color-scheme: light;
-      }
-      body{color:var(--muted);}
+      :root{ --bg:#f6f7fb; --muted:#333; --accent:#0b6cff; color-scheme: light; }
+      body{ color:var(--muted); }
     }
 
-    /* ====== Base ====== */
     html,body{height:100%;}
     body{
-      margin:0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
       background: radial-gradient(1200px 600px at 10% 10%, rgba(255,255,255,0.02), transparent), var(--bg);
-      color:#e9eef6;
-      min-height:100vh;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding:36px 20px;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow:auto;
+      color:#e9eef6; min-height:100vh; display:flex; align-items:flex-start; justify-content:center;
+      padding:36px 20px; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow:auto;
     }
 
-    /* Canvas behind content */
-    canvas#bg{ position:fixed; inset:0; z-index:0; display:block; }
+    canvas#bg{ position:fixed; inset:0; z-index:0; display:block; pointer-events:none; }
 
-    /* Container */
     .wrap{ position:relative; z-index:2; width:100%; max-width:var(--max-width); }
     .card{
-      backdrop-filter: blur(8px) saturate(120%);
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:28px 20px 28px 20px;
-      border:1px solid rgba(255,255,255,0.03);
+      backdrop-filter: blur(8px) saturate(120%); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius); box-shadow:0 6px 24px rgba(2,6,23,0.7); padding:28px 20px; border:1px solid rgba(255,255,255,0.03);
     }
 
     header{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:20px; }
-    .title{ font-size:1.15rem; font-weight:700; letter-spacing:0.2px; }
+    .title{ font-size:1.15rem; font-weight:700; }
     .subtitle{ font-size:0.85rem; color:var(--muted); font-weight:500; }
 
-    /* Clock & theme toggle */
     .controls{ display:flex; gap:10px; align-items:center; }
-    .clock{ font-family: 'Courier New', monospace; font-weight:700; font-size:0.95rem; color:var(--muted); user-select:none; }
-    .btn{
-      appearance:none; border:0; padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer; background:linear-gradient(180deg,var(--surface),transparent);
-      color:inherit; display:inline-flex; gap:8px; align-items:center; justify-content:center; transition:transform .12s ease, box-shadow .12s ease;
-    }
+    .clock{ font-family:'Courier New', monospace; font-weight:700; font-size:0.95rem; color:var(--muted); user-select:none; }
+    .btn{ appearance:none; border:0; padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer;
+          background:linear-gradient(180deg,var(--surface),transparent); color:inherit; display:inline-flex; gap:8px; align-items:center; justify-content:center; }
     .btn:active{ transform:translateY(1px); }
-    .icon{ width:18px; height:18px; display:inline-block; }
 
-    /* Accordion list */
     .list{ display:flex; flex-direction:column; gap:12px; }
-
-    .item{
-      background:var(--glass); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.02);
-      transition: transform .12s ease, box-shadow .12s ease; box-shadow: 0 4px 18px rgba(2,6,23,0.5);
-    }
-    .item:focus-within{ box-shadow: var(--focus); }
-    .head{
-      display:flex; align-items:center; gap:12px; padding:12px 14px; cursor:pointer; user-select:none;
-    }
-    .avatar{ width:44px; height:44px; border-radius:10px; display:grid; place-items:center; flex-shrink:0; background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent); }
+    .item{ background:var(--glass); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.02);
+           transition: transform .12s ease, box-shadow .12s ease; box-shadow:0 4px 18px rgba(2,6,23,0.5); }
+    .item:focus-within{ box-shadow:var(--focus); }
+    .head{ display:flex; align-items:center; gap:12px; padding:12px 14px; cursor:pointer; user-select:none; }
+    .avatar{ width:44px; height:44px; border-radius:10px; display:grid; place-items:center; flex-shrink:0; }
     .appname{ font-weight:700; font-size:0.95rem; }
     .chev{ margin-left:auto; color:var(--muted); transition:transform .22s ease; }
 
@@ -103,26 +57,23 @@
     .panel.open{ padding:12px 14px 16px 14px; }
 
     .actions{ display:flex; gap:10px; align-items:center; }
-    .link{
-      display:inline-flex; gap:10px; align-items:center; padding:10px 14px; border-radius:10px; text-decoration:none; font-weight:800; font-size:0.9rem;
-      background:linear-gradient(180deg,var(--accent), rgba(0,0,0,0.04)); color:#fff; box-shadow:0 6px 18px rgba(0,0,0,0.35);
-    }
+    .link{ display:inline-flex; gap:10px; align-items:center; padding:10px 14px; border-radius:10px; text-decoration:none; font-weight:800; font-size:0.9rem;
+           background:linear-gradient(180deg,var(--accent), rgba(0,0,0,0.04)); color:#fff; box-shadow:0 6px 18px rgba(0,0,0,0.35); }
     .link.secondary{ background:transparent; color:var(--muted); font-weight:700; box-shadow:none; border:1px solid rgba(255,255,255,0.02); }
 
-    /* Focus visible */
     .head:focus{ outline:none; box-shadow:var(--focus); }
     .link:focus{ outline:none; box-shadow:var(--focus); }
 
-    /* Small screens */
     @media (max-width:520px){
-      body{ padding:20px 14px; }
-      .card{ padding:18px 14px; }
-      .avatar{ width:40px; height:40px; }
+      body{ padding:20px 14px; } .card{ padding:18px 14px; } .avatar{ width:40px; height:40px; }
     }
+
+    /* small helper */
+    .sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
   </style>
 </head>
 <body>
-  <canvas id="bg"></canvas>
+  <canvas id="bg" aria-hidden="true"></canvas>
 
   <main class="wrap">
     <section class="card" aria-labelledby="mainTitle">
@@ -134,22 +85,15 @@
 
         <div class="controls">
           <div id="clock" class="clock" aria-hidden="false">--:--:--</div>
-          <button id="themeToggle" class="btn" title="Alternar tema (claro/escuro)">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v2M12 20v2M4.22 4.22 5.64 5.64M18.36 18.36 19.78 19.78M2 12h2M20 12h2M4.22 19.78 5.64 18.36M18.36 5.64 19.78 4.22" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
-            <span class="sr">Tema</span>
-          </button>
+          <button id="themeToggle" class="btn" title="Alternar tema (claro/escuro)"><span class="sr">Alternar tema</span>🔆</button>
         </div>
       </header>
 
       <nav class="list" aria-label="Lista de apps">
-        <!-- Item template: .item > .head + .panel -->
-
+        <!-- WhatsApp -->
         <article class="item">
           <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">
-              <!-- chat icon -->
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
+            <div class="avatar" aria-hidden="true">💬</div>
             <div class="appname">WhatsApp</div>
             <div class="chev" aria-hidden="true">▸</div>
           </div>
@@ -161,12 +105,10 @@
           </div>
         </article>
 
+        <!-- TikTok -->
         <article class="item">
           <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">
-              <!-- video icon -->
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="6.5" width="15" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M20 8v8l-4-4 4-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
+            <div class="avatar" aria-hidden="true">🎵</div>
             <div class="appname">TikTok</div>
             <div class="chev" aria-hidden="true">▸</div>
           </div>
@@ -178,12 +120,10 @@
           </div>
         </article>
 
+        <!-- Instagram -->
         <article class="item">
           <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">
-              <!-- camera icon -->
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 7h-3.586l-1.707-1.707A1 1 0 0 0 15.586 5H8.414a1 1 0 0 0-.707.293L6 7H3a1 1 0 0 0-1 1v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="12" cy="13" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
-            </div>
+            <div class="avatar" aria-hidden="true">📷</div>
             <div class="appname">Instagram</div>
             <div class="chev" aria-hidden="true">▸</div>
           </div>
@@ -195,12 +135,10 @@
           </div>
         </article>
 
+        <!-- YouTube -->
         <article class="item">
           <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">
-              <!-- play icon -->
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 3v18l15-9L5 3z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
+            <div class="avatar" aria-hidden="true">▶️</div>
             <div class="appname">YouTube</div>
             <div class="chev" aria-hidden="true">▸</div>
           </div>
@@ -212,12 +150,10 @@
           </div>
         </article>
 
+        <!-- Discord -->
         <article class="item">
           <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">
-              <!-- discord-ish icon -->
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7.5 7.5c.8 0 1.5.7 1.5 1.5S8.3 10.5 7.5 10.5 6 9.8 6 9s.7-1.5 1.5-1.5zM16.5 7.5c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5S15 9.8 15 9s.7-1.5 1.5-1.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 16s-1.2 2-6 2-6-2-6-2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/></svg>
-            </div>
+            <div class="avatar" aria-hidden="true">🛡️</div>
             <div class="appname">Discord</div>
             <div class="chev" aria-hidden="true">▸</div>
           </div>
@@ -229,12 +165,10 @@
           </div>
         </article>
 
+        <!-- Spotify -->
         <article class="item">
           <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">
-              <!-- music icon -->
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 17a3 3 0 1 0 0-6h.01A3 3 0 0 0 9 17zm6-6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 11l4-1V4l-4 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
+            <div class="avatar" aria-hidden="true">🎧</div>
             <div class="appname">Spotify</div>
             <div class="chev" aria-hidden="true">▸</div>
           </div>
@@ -251,150 +185,211 @@
   </main>
 
   <script>
-    /* ========== Clock ========== */
-    (function(){
-      const el = document.getElementById('clock');
-      function tick(){
-        const now = new Date();
-        const h = String(now.getHours()).padStart(2,'0');
-        const m = String(now.getMinutes()).padStart(2,'0');
-        const s = String(now.getSeconds()).padStart(2,'0');
-        el.textContent = `${h}:${m}:${s}`;
+  /* ========== Clock ========== */
+  (function(){
+    const el = document.getElementById('clock');
+    function tick(){
+      const now = new Date();
+      el.textContent = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    }
+    tick(); setInterval(tick,1000);
+  })();
+
+  /* ========== Theme toggle (saved to localStorage) ========== */
+  (function(){
+    const btn = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    function setTheme(isDark){
+      if(!isDark){
+        root.style.setProperty('--bg','#ffffff');
+        root.style.setProperty('--muted','#222');
+        root.style.setProperty('--accent','#0b6cff');
+        document.body.style.color = '#1a1a1a';
+      } else {
+        root.style.removeProperty('--bg');
+        root.style.removeProperty('--muted');
+        root.style.removeProperty('--accent');
+        document.body.style.color = '';
       }
-      tick();
-      setInterval(tick,1000);
-    })();
+      try{ localStorage.setItem('mumas_theme_dark', isDark ? '1' : '0'); }catch(e){}
+    }
+    const stored = localStorage.getItem('mumas_theme_dark');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let dark = stored == null ? prefersDark : stored === '1';
+    setTheme(dark);
+    btn.addEventListener('click', ()=>{ dark = !dark; setTheme(dark); });
+  })();
 
-    /* ========== Theme toggle (respects prefers-color-scheme) ========== */
-    (function(){
-      const btn = document.getElementById('themeToggle');
-      const root = document.documentElement;
-
-      // Save preference to localStorage
-      function setTheme(isDark){
-        if(!isDark){
-          root.style.setProperty('--bg','#ffffff');
-          root.style.setProperty('--muted','#222');
-          root.style.setProperty('--accent','#0b6cff');
-          document.body.style.color = '#1a1a1a';
-        } else {
-          root.style.removeProperty('--bg');
-          root.style.removeProperty('--muted');
-          root.style.removeProperty('--accent');
-          document.body.style.color = '';
-        }
-        try{ localStorage.setItem('mumas_theme_dark', isDark ? '1' : '0'); }catch(e){}
-      }
-
-      // initialize from storage or prefers-color-scheme
-      const stored = localStorage.getItem('mumas_theme_dark');
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      let dark = stored==null ? prefersDark : stored === '1';
-      setTheme(dark);
-
-      btn.addEventListener('click',()=>{ dark = !dark; setTheme(dark); });
-    })();
-
-    /* ========== Accessible accordion using scrollHeight ========== */
-    (function(){
-      const heads = document.querySelectorAll('.head');
-      heads.forEach(head=>{
-        const panel = head.nextElementSibling;
-        const chevron = head.querySelector('.chev');
-        function closeOtherOpen(){
-          document.querySelectorAll('.panel.open').forEach(p=>{
-            if(p!==panel){ p.style.maxHeight = null; p.classList.remove('open'); p.previousElementSibling.setAttribute('aria-expanded','false'); p.previousElementSibling.querySelector('.chev').style.transform = '';
-            }
-          });
-        }
-        function toggle(){
-          const isOpen = panel.classList.contains('open');
-          if(isOpen){
-            panel.style.maxHeight = null;
-            panel.classList.remove('open');
-            head.setAttribute('aria-expanded','false');
-            chevron.style.transform = '';
-          } else {
-            closeOtherOpen();
-            panel.classList.add('open');
-            panel.style.maxHeight = panel.scrollHeight + 'px';
-            head.setAttribute('aria-expanded','true');
-            chevron.style.transform = 'rotate(90deg)';
+  /* ========== Accordion (uses scrollHeight) ========== */
+  (function(){
+    const heads = document.querySelectorAll('.head');
+    heads.forEach(head=>{
+      const panel = head.nextElementSibling;
+      const chevron = head.querySelector('.chev');
+      function closeOthers(){
+        document.querySelectorAll('.panel.open').forEach(p=>{
+          if(p !== panel){
+            p.style.maxHeight = null;
+            p.classList.remove('open');
+            p.previousElementSibling.setAttribute('aria-expanded','false');
+            p.previousElementSibling.querySelector('.chev').style.transform = '';
           }
-        }
-        head.addEventListener('click',toggle);
-        head.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(); } });
-      });
-
-      // Close all on resize to recalc heights
-      window.addEventListener('resize', ()=>{
-        document.querySelectorAll('.panel.open').forEach(p=>{ p.style.maxHeight = p.scrollHeight + 'px'; });
-      });
-    })();
-
-    /* ========== Background particles (optimized) ========== */
-    (function(){
-      const canvas = document.getElementById('bg');
-      const ctx = canvas.getContext('2d');
-      let W = canvas.width = innerWidth;
-      let H = canvas.height = innerHeight;
-
-      let particleCount = innerWidth < 520 ? 36 : 80;
-      let particles = [];
-      let running = true;
-
-      function initParticles(){
-        particles = [];
-        for(let i=0;i<particleCount;i++){
-          particles.push({
-            x: Math.random()*W,
-            y: Math.random()*H,
-            r: Math.random()*1.8 + 0.7,
-            vx: (Math.random()-0.5)*0.4,
-            vy: (Math.random()-0.5)*0.4,
-            hue: Math.random()*360
-          });
-        }
-      }
-
-      function resize(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; particleCount = innerWidth < 520 ? 36 : 80; initParticles(); }
-      window.addEventListener('resize', resize);
-
-      // pause animation when tab not visible
-      document.addEventListener('visibilitychange', ()=>{ running = !document.hidden; if(running) requestAnimationFrame(loop); });
-
-      function draw(){
-        ctx.clearRect(0,0,W,H);
-        particles.forEach(p=>{
-          p.x += p.vx; p.y += p.vy;
-          if(p.x < -10) p.x = W + 10; if(p.x > W + 10) p.x = -10;
-          if(p.y < -10) p.y = H + 10; if(p.y > H + 10) p.y = -10;
-
-          ctx.beginPath();
-          const g = ctx.createRadialGradient(p.x,p.y,p.r*0.1,p.x,p.y,p.r*6);
-          g.addColorStop(0, `hsla(${p.hue},70%,60%,0.18)`);
-          g.addColorStop(0.4, `hsla(${p.hue},60%,45%,0.09)`);
-          g.addColorStop(1, `transparent`);
-          ctx.fillStyle = g;
-          ctx.arc(p.x,p.y,p.r*6,0,Math.PI*2);
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.fillStyle = `hsla(${p.hue},55%,55%,0.9)`;
-          ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-          ctx.fill();
         });
       }
+      function toggle(){
+        const isOpen = panel.classList.contains('open');
+        if(isOpen){
+          panel.style.maxHeight = null;
+          panel.classList.remove('open');
+          head.setAttribute('aria-expanded','false');
+          chevron.style.transform = '';
+        } else {
+          closeOthers();
+          panel.classList.add('open');
+          panel.style.maxHeight = panel.scrollHeight + 'px';
+          head.setAttribute('aria-expanded','true');
+          chevron.style.transform = 'rotate(90deg)';
+        }
+      }
+      head.addEventListener('click', toggle);
+      head.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    });
+    window.addEventListener('resize', ()=>{ document.querySelectorAll('.panel.open').forEach(p=>{ p.style.maxHeight = p.scrollHeight + 'px'; }); });
+    // open first by default
+    const first = document.querySelector('.item .head'); if(first) first.click();
+  })();
 
-      function loop(){ if(!running) return; draw(); requestAnimationFrame(loop); }
-      initParticles(); requestAnimationFrame(loop);
-    })();
+  /* ========== Particles with mouse repulsion ==========
+     Parameters you can tweak:
+     - baseCount (desktop), mobileCount (mobile)
+     - repulseRadius: how far particles are pushed
+     - repulseStrength: how strong the push is
+  =====================================================*/
+  (function(){
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+    let W = canvas.width = innerWidth;
+    let H = canvas.height = innerHeight;
 
-    /* ========== Small enhancements: open first item on load (optional) ========== */
-    (function(){
-      const first = document.querySelector('.item .head');
-      if(first) first.click();
-    })();
+    // performance settings
+    const baseCount = 80;
+    const mobileCount = 36;
+    const maxParticleSize = 2.4;
+    const repulseRadius = 110;    // px
+    const repulseStrength = 0.85; // multiplier
+
+    let particleCount = window.innerWidth < 520 ? mobileCount : baseCount;
+    let particles = [];
+    let pointer = { x: -9999, y: -9999, active: false, isTouch:false };
+    let running = true;
+
+    function rand(min, max){ return Math.random()*(max-min)+min; }
+    function init(){
+      particles = [];
+      for(let i=0;i<particleCount;i++){
+        particles.push({
+          x: Math.random()*W,
+          y: Math.random()*H,
+          r: Math.random()*maxParticleSize + 0.6,
+          vx: rand(-0.35,0.35),
+          vy: rand(-0.35,0.35),
+          hue: rand(200,320)
+        });
+      }
+    }
+
+    function resize(){
+      W = canvas.width = innerWidth; H = canvas.height = innerHeight;
+      particleCount = window.innerWidth < 520 ? mobileCount : baseCount;
+      init();
+    }
+    window.addEventListener('resize', resize);
+
+    // pointer handling (mouse + touch)
+    function onPointerMove(e){
+      pointer.active = true;
+      pointer.isTouch = (e.type.indexOf('touch') === 0);
+      const p = pointer.isTouch ? e.touches[0] || e.changedTouches[0] : e;
+      pointer.x = p.clientX;
+      pointer.y = p.clientY;
+      // if touch, keep it active for short time
+      if(pointer.isTouch){
+        clearTimeout(pointer._t);
+        pointer._t = setTimeout(()=>{ pointer.active = false; }, 900);
+      }
+    }
+    window.addEventListener('mousemove', onPointerMove, { passive:true });
+    window.addEventListener('touchstart', onPointerMove, { passive:true });
+    window.addEventListener('touchmove', onPointerMove, { passive:true });
+    window.addEventListener('touchend', ()=>{ pointer.active = false; }, { passive:true });
+
+    // pause when not visible
+    document.addEventListener('visibilitychange', ()=>{ running = !document.hidden; if(running) requestAnimationFrame(loop); });
+
+    function step(){
+      // basic motion
+      for(let p of particles){
+        // repel from pointer if active
+        if(pointer.active){
+          const dx = p.x - pointer.x;
+          const dy = p.y - pointer.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if(dist < repulseRadius){
+            // normalized vector
+            const nx = dx / (dist || 1);
+            const ny = dy / (dist || 1);
+            // strength falloff (closer => stronger)
+            const force = ((repulseRadius - dist) / repulseRadius) * repulseStrength;
+            p.vx += nx * force * 0.6;
+            p.vy += ny * force * 0.6;
+          }
+        }
+        // slight damp to prevent runaway velocities
+        p.vx *= 0.985; p.vy *= 0.985;
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // wrap around edges smoothly
+        if(p.x < -20) p.x = W + 20;
+        if(p.x > W + 20) p.x = -20;
+        if(p.y < -20) p.y = H + 20;
+        if(p.y > H + 20) p.y = -20;
+      }
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      // subtle dim overlay to create motion trail effect
+      // (comment out if you want hard motion)
+      // ctx.fillStyle = 'rgba(0,0,0,0.06)'; ctx.fillRect(0,0,W,H);
+
+      for(let p of particles){
+        // soft glow
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r*6);
+        g.addColorStop(0, `hsla(${p.hue},65%,60%,0.14)`);
+        g.addColorStop(0.4, `hsla(${p.hue},60%,45%,0.08)`);
+        g.addColorStop(1, `transparent`);
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r*6, 0, Math.PI*2); ctx.fill();
+
+        // core dot
+        ctx.beginPath();
+        ctx.fillStyle = `hsla(${p.hue},60%,55%,0.95)`;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+
+    function loop(){
+      if(!running) return;
+      step();
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    init(); requestAnimationFrame(loop);
+  })();
   </script>
 </body>
 </html>
