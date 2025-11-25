@@ -1,395 +1,139 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Apps do Murilo — Hub</title>
-  <meta name="description" content="Hub minimalista do Murilo: links rápidos para WhatsApp, TikTok, Instagram, YouTube, Discord e Spotify." />
-  <meta name="theme-color" content="#050505" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meus Apps</title>
   <style>
-    :root{
-      --bg:#050505; --surface:rgba(255,255,255,0.02); --muted:#bfbfbf; --accent:#ef476f;
-      --glass:rgba(255,255,255,0.02); --focus:0 0 0 4px rgba(239,71,111,0.12);
-      --radius:14px; --max-width:520px;
-      color-scheme: dark;
-    }
-    @media (prefers-color-scheme: light){
-      :root{ --bg:#f6f7fb; --muted:#333; --accent:#0b6cff; color-scheme: light; }
-      body{ color:var(--muted); }
-    }
-
-    html,body{height:100%;}
-    body{
-      margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,255,255,0.02), transparent), var(--bg);
-      color:#e9eef6; min-height:100vh; display:flex; align-items:flex-start; justify-content:center;
-      padding:36px 20px; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow:auto;
+    /* ======= Estilo Geral ======= */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    canvas#bg{ position:fixed; inset:0; z-index:0; display:block; pointer-events:none; }
-
-    .wrap{ position:relative; z-index:2; width:100%; max-width:var(--max-width); }
-    .card{
-      backdrop-filter: blur(8px) saturate(120%); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:var(--radius); box-shadow:0 6px 24px rgba(2,6,23,0.7); padding:28px 20px; border:1px solid rgba(255,255,255,0.03);
+    h1 {
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+      text-shadow: 0 0 10px #fff3;
     }
 
-    header{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:20px; }
-    .title{ font-size:1.15rem; font-weight:700; }
-    .subtitle{ font-size:0.85rem; color:var(--muted); font-weight:500; }
-
-    .controls{ display:flex; gap:10px; align-items:center; }
-    .clock{ font-family:'Courier New', monospace; font-weight:700; font-size:0.95rem; color:var(--muted); user-select:none; }
-    .btn{ appearance:none; border:0; padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer;
-          background:linear-gradient(180deg,var(--surface),transparent); color:inherit; display:inline-flex; gap:8px; align-items:center; justify-content:center; }
-    .btn:active{ transform:translateY(1px); }
-
-    .list{ display:flex; flex-direction:column; gap:12px; }
-    .item{ background:var(--glass); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.02);
-           transition: transform .12s ease, box-shadow .12s ease; box-shadow:0 4px 18px rgba(2,6,23,0.5); }
-    .item:focus-within{ box-shadow:var(--focus); }
-    .head{ display:flex; align-items:center; gap:12px; padding:12px 14px; cursor:pointer; user-select:none; }
-    .avatar{ width:44px; height:44px; border-radius:10px; display:grid; place-items:center; flex-shrink:0; }
-    .appname{ font-weight:700; font-size:0.95rem; }
-    .chev{ margin-left:auto; color:var(--muted); transition:transform .22s ease; }
-
-    .panel{ max-height:0; overflow:hidden; padding:0 14px; transition: max-height .32s cubic-bezier(.2,.8,.2,1), padding .22s ease; background:transparent; }
-    .panel.open{ padding:12px 14px 16px 14px; }
-
-    .actions{ display:flex; gap:10px; align-items:center; }
-    .link{ display:inline-flex; gap:10px; align-items:center; padding:10px 14px; border-radius:10px; text-decoration:none; font-weight:800; font-size:0.9rem;
-           background:linear-gradient(180deg,var(--accent), rgba(0,0,0,0.04)); color:#fff; box-shadow:0 6px 18px rgba(0,0,0,0.35); }
-    .link.secondary{ background:transparent; color:var(--muted); font-weight:700; box-shadow:none; border:1px solid rgba(255,255,255,0.02); }
-
-    .head:focus{ outline:none; box-shadow:var(--focus); }
-    .link:focus{ outline:none; box-shadow:var(--focus); }
-
-    @media (max-width:520px){
-      body{ padding:20px 14px; } .card{ padding:18px 14px; } .avatar{ width:40px; height:40px; }
+    /* ======= Container de Apps ======= */
+    .apps {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    /* small helper */
-    .sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+    .apps a img {
+      width: 80px;
+      height: 80px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-radius: 15%;
+    }
+
+    .apps a img:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 15px #fff7;
+    }
+
+    /* ======= Canvas de Partículas ======= */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
   </style>
 </head>
 <body>
-  <canvas id="bg" aria-hidden="true"></canvas>
+  <h1 id="greeting">Olá!</h1>
 
-  <main class="wrap">
-    <section class="card" aria-labelledby="mainTitle">
-      <header>
-        <div>
-          <div id="mainTitle" class="title">Olá, Murilo — qual app você quer abrir hoje?</div>
-          <div class="subtitle">Hub rápido • Clique para expandir</div>
-        </div>
+  <div class="apps">
+    <a href="https://web.whatsapp.com" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+    </a>
+    <a href="https://www.tiktok.com" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" alt="TikTok">
+    </a>
+    <a href="https://www.instagram.com" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram">
+    </a>
+    <a href="https://discord.com" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord">
+    </a>
+    <a href="https://www.spotify.com" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/174/174872.png" alt="Spotify">
+    </a>
+    <a href="https://www.youtube.com" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
+    </a>
+  </div>
 
-        <div class="controls">
-          <div id="clock" class="clock" aria-hidden="false">--:--:--</div>
-          <button id="themeToggle" class="btn" title="Alternar tema (claro/escuro)"><span class="sr">Alternar tema</span>🔆</button>
-        </div>
-      </header>
-
-      <nav class="list" aria-label="Lista de apps">
-        <!-- WhatsApp -->
-        <article class="item">
-          <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">💬</div>
-            <div class="appname">WhatsApp</div>
-            <div class="chev" aria-hidden="true">▸</div>
-          </div>
-          <div class="panel">
-            <div class="actions">
-              <a class="link" href="https://web.whatsapp.com/" target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
-              <a class="link secondary" href="https://web.whatsapp.com/" target="_blank" rel="noopener noreferrer">Abrir (nova aba)</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- TikTok -->
-        <article class="item">
-          <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">🎵</div>
-            <div class="appname">TikTok</div>
-            <div class="chev" aria-hidden="true">▸</div>
-          </div>
-          <div class="panel">
-            <div class="actions">
-              <a class="link" href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer">Abrir TikTok</a>
-              <a class="link secondary" href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer">Abrir (nova aba)</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Instagram -->
-        <article class="item">
-          <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">📷</div>
-            <div class="appname">Instagram</div>
-            <div class="chev" aria-hidden="true">▸</div>
-          </div>
-          <div class="panel">
-            <div class="actions">
-              <a class="link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Abrir Instagram</a>
-              <a class="link secondary" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Abrir (nova aba)</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- YouTube -->
-        <article class="item">
-          <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">▶️</div>
-            <div class="appname">YouTube</div>
-            <div class="chev" aria-hidden="true">▸</div>
-          </div>
-          <div class="panel">
-            <div class="actions">
-              <a class="link" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Abrir YouTube</a>
-              <a class="link secondary" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Abrir (nova aba)</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Discord -->
-        <article class="item">
-          <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">🛡️</div>
-            <div class="appname">Discord</div>
-            <div class="chev" aria-hidden="true">▸</div>
-          </div>
-          <div class="panel">
-            <div class="actions">
-              <a class="link" href="https://discord.com/app" target="_blank" rel="noopener noreferrer">Abrir Discord</a>
-              <a class="link secondary" href="https://discord.com/app" target="_blank" rel="noopener noreferrer">Abrir (nova aba)</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Spotify -->
-        <article class="item">
-          <div class="head" role="button" tabindex="0" aria-expanded="false">
-            <div class="avatar" aria-hidden="true">🎧</div>
-            <div class="appname">Spotify</div>
-            <div class="chev" aria-hidden="true">▸</div>
-          </div>
-          <div class="panel">
-            <div class="actions">
-              <a class="link" href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">Abrir Spotify</a>
-              <a class="link secondary" href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">Abrir (nova aba)</a>
-            </div>
-          </div>
-        </article>
-
-      </nav>
-    </section>
-  </main>
+  <canvas id="particles"></canvas>
 
   <script>
-  /* ========== Clock ========== */
-  (function(){
-    const el = document.getElementById('clock');
-    function tick(){
-      const now = new Date();
-      el.textContent = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-    }
-    tick(); setInterval(tick,1000);
-  })();
+    // ======= Saudação Dinâmica =======
+    const greeting = document.getElementById('greeting');
+    const hour = new Date().getHours();
+    if(hour >= 5 && hour < 12) greeting.textContent = 'Bom dia!';
+    else if(hour >= 12 && hour < 18) greeting.textContent = 'Boa tarde!';
+    else greeting.textContent = 'Boa noite!';
 
-  /* ========== Theme toggle (saved to localStorage) ========== */
-  (function(){
-    const btn = document.getElementById('themeToggle');
-    const root = document.documentElement;
-    function setTheme(isDark){
-      if(!isDark){
-        root.style.setProperty('--bg','#ffffff');
-        root.style.setProperty('--muted','#222');
-        root.style.setProperty('--accent','#0b6cff');
-        document.body.style.color = '#1a1a1a';
-      } else {
-        root.style.removeProperty('--bg');
-        root.style.removeProperty('--muted');
-        root.style.removeProperty('--accent');
-        document.body.style.color = '';
-      }
-      try{ localStorage.setItem('mumas_theme_dark', isDark ? '1' : '0'); }catch(e){}
-    }
-    const stored = localStorage.getItem('mumas_theme_dark');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    let dark = stored == null ? prefersDark : stored === '1';
-    setTheme(dark);
-    btn.addEventListener('click', ()=>{ dark = !dark; setTheme(dark); });
-  })();
-
-  /* ========== Accordion (uses scrollHeight) ========== */
-  (function(){
-    const heads = document.querySelectorAll('.head');
-    heads.forEach(head=>{
-      const panel = head.nextElementSibling;
-      const chevron = head.querySelector('.chev');
-      function closeOthers(){
-        document.querySelectorAll('.panel.open').forEach(p=>{
-          if(p !== panel){
-            p.style.maxHeight = null;
-            p.classList.remove('open');
-            p.previousElementSibling.setAttribute('aria-expanded','false');
-            p.previousElementSibling.querySelector('.chev').style.transform = '';
-          }
-        });
-      }
-      function toggle(){
-        const isOpen = panel.classList.contains('open');
-        if(isOpen){
-          panel.style.maxHeight = null;
-          panel.classList.remove('open');
-          head.setAttribute('aria-expanded','false');
-          chevron.style.transform = '';
-        } else {
-          closeOthers();
-          panel.classList.add('open');
-          panel.style.maxHeight = panel.scrollHeight + 'px';
-          head.setAttribute('aria-expanded','true');
-          chevron.style.transform = 'rotate(90deg)';
-        }
-      }
-      head.addEventListener('click', toggle);
-      head.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
-    });
-    window.addEventListener('resize', ()=>{ document.querySelectorAll('.panel.open').forEach(p=>{ p.style.maxHeight = p.scrollHeight + 'px'; }); });
-    // open first by default
-    const first = document.querySelector('.item .head'); if(first) first.click();
-  })();
-
-  /* ========== Particles with mouse repulsion ==========
-     Parameters you can tweak:
-     - baseCount (desktop), mobileCount (mobile)
-     - repulseRadius: how far particles are pushed
-     - repulseStrength: how strong the push is
-  =====================================================*/
-  (function(){
-    const canvas = document.getElementById('bg');
+    // ======= Partículas Interativas =======
+    const canvas = document.getElementById('particles');
     const ctx = canvas.getContext('2d');
-    let W = canvas.width = innerWidth;
-    let H = canvas.height = innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    // performance settings
-    const baseCount = 80;
-    const mobileCount = 36;
-    const maxParticleSize = 2.4;
-    const repulseRadius = 110;    // px
-    const repulseStrength = 0.85; // multiplier
+    const particles = [];
+    const colors = ['#ff4d4d', '#4dff88', '#4d88ff', '#ffdd4d'];
 
-    let particleCount = window.innerWidth < 520 ? mobileCount : baseCount;
-    let particles = [];
-    let pointer = { x: -9999, y: -9999, active: false, isTouch:false };
-    let running = true;
-
-    function rand(min, max){ return Math.random()*(max-min)+min; }
-    function init(){
-      particles = [];
-      for(let i=0;i<particleCount;i++){
+    function createParticles() {
+      for(let i = 0; i < 120; i++) {
         particles.push({
-          x: Math.random()*W,
-          y: Math.random()*H,
-          r: Math.random()*maxParticleSize + 0.6,
-          vx: rand(-0.35,0.35),
-          vy: rand(-0.35,0.35),
-          hue: rand(200,320)
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 3 + 1,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          dx: (Math.random() - 0.5) * 1.2,
+          dy: (Math.random() - 0.5) * 1.2
         });
       }
     }
 
-    function resize(){
-      W = canvas.width = innerWidth; H = canvas.height = innerHeight;
-      particleCount = window.innerWidth < 520 ? mobileCount : baseCount;
-      init();
-    }
-    window.addEventListener('resize', resize);
-
-    // pointer handling (mouse + touch)
-    function onPointerMove(e){
-      pointer.active = true;
-      pointer.isTouch = (e.type.indexOf('touch') === 0);
-      const p = pointer.isTouch ? e.touches[0] || e.changedTouches[0] : e;
-      pointer.x = p.clientX;
-      pointer.y = p.clientY;
-      // if touch, keep it active for short time
-      if(pointer.isTouch){
-        clearTimeout(pointer._t);
-        pointer._t = setTimeout(()=>{ pointer.active = false; }, 900);
-      }
-    }
-    window.addEventListener('mousemove', onPointerMove, { passive:true });
-    window.addEventListener('touchstart', onPointerMove, { passive:true });
-    window.addEventListener('touchmove', onPointerMove, { passive:true });
-    window.addEventListener('touchend', ()=>{ pointer.active = false; }, { passive:true });
-
-    // pause when not visible
-    document.addEventListener('visibilitychange', ()=>{ running = !document.hidden; if(running) requestAnimationFrame(loop); });
-
-    function step(){
-      // basic motion
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       for(let p of particles){
-        // repel from pointer if active
-        if(pointer.active){
-          const dx = p.x - pointer.x;
-          const dy = p.y - pointer.y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          if(dist < repulseRadius){
-            // normalized vector
-            const nx = dx / (dist || 1);
-            const ny = dy / (dist || 1);
-            // strength falloff (closer => stronger)
-            const force = ((repulseRadius - dist) / repulseRadius) * repulseStrength;
-            p.vx += nx * force * 0.6;
-            p.vy += ny * force * 0.6;
-          }
-        }
-        // slight damp to prevent runaway velocities
-        p.vx *= 0.985; p.vy *= 0.985;
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        // wrap around edges smoothly
-        if(p.x < -20) p.x = W + 20;
-        if(p.x > W + 20) p.x = -20;
-        if(p.y < -20) p.y = H + 20;
-        if(p.y > H + 20) p.y = -20;
-      }
-    }
-
-    function draw(){
-      ctx.clearRect(0,0,W,H);
-      // subtle dim overlay to create motion trail effect
-      // (comment out if you want hard motion)
-      // ctx.fillStyle = 'rgba(0,0,0,0.06)'; ctx.fillRect(0,0,W,H);
-
-      for(let p of particles){
-        // soft glow
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r*6);
-        g.addColorStop(0, `hsla(${p.hue},65%,60%,0.14)`);
-        g.addColorStop(0.4, `hsla(${p.hue},60%,45%,0.08)`);
-        g.addColorStop(1, `transparent`);
-        ctx.fillStyle = g;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r*6, 0, Math.PI*2); ctx.fill();
-
-        // core dot
         ctx.beginPath();
-        ctx.fillStyle = `hsla(${p.hue},60%,55%,0.95)`;
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
         ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+
+        if(p.x < 0 || p.x > canvas.width) p.dx = -p.dx;
+        if(p.y < 0 || p.y > canvas.height) p.dy = -p.dy;
       }
+      requestAnimationFrame(drawParticles);
     }
 
-    function loop(){
-      if(!running) return;
-      step();
-      draw();
-      requestAnimationFrame(loop);
-    }
+    createParticles();
+    drawParticles();
 
-    init(); requestAnimationFrame(loop);
-  })();
+    // Ajuste ao redimensionar a tela
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
   </script>
 </body>
 </html>
