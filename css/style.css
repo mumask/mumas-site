@@ -1,25 +1,55 @@
 body {
-    margin: 0;
-    overflow: hidden;
-    background-color: #000;
-    font-family: sans-serif;
+  margin:0;
+  font-family:Arial, sans-serif;
+  color:#eee;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:40px 20px;
+  overflow:hidden;
+  background:#000;
+}
+canvas { position:fixed; top:0; left:0; z-index:-1; }
+
+.container {
+  width:100%;
+  max-width:480px;
+  background:rgba(0,0,0,0.85);
+  border-radius:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.7);
+  padding:30px 20px 40px 20px;
+  position:relative;
 }
 
-canvas {
-    display: block;
-    width: 100vw;
-    height: 100vh;
+header {
+  font-size:1.5rem;
+  text-align:center;
+  margin-bottom:24px;
 }
 
-#ui {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 10;
-    color: #fff;
+#clock {
+  position:fixed;
+  top:16px;
+  right:24px;
+  font-family:'Courier New', monospace;
+  font-weight:600;
+  font-size:1.1rem;
+  color:#fff;
+  user-select:none;
 }
 
-#ui button {
-    margin-right: 10px;
-    padding: 5px 10px;
-}
+.accordion-item { background:#111; border-radius:10px; margin-bottom:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.7); }
+.accordion-header { cursor:pointer; padding:14px 20px; display:flex; align-items:center; transition:background-color 0.25s ease; }
+.accordion-header:hover { background-color:#222; }
+.accordion-header img { width:28px; height:28px; margin-right:12px; flex-shrink:0; filter:drop-shadow(0 0 1px black); }
+.accordion-title { flex-grow:1; font-weight:600; font-size:1rem; }
+.accordion-arrow { transition: transform 0.3s ease; color:#ccc; }
+.accordion-arrow.open { transform:rotate(90deg); }
+.accordion-content { max-height:0; overflow:hidden; padding:0 20px; background:#222; transition:max-height 0.3s ease, padding 0.3s ease; }
+.accordion-content.open { padding:12px 20px 16px 20px; max-height:60px; }
+
+.btn-link { display:inline-block; padding:8px 16px; background:#e52e71; border-radius:8px; color:#fff; font-weight:700; font-size:0.85rem; text-decoration:none; transition:background-color 0.3s ease; box-shadow:0 2px 8px #e52e71aa; }
+.btn-link:hover { background-color:#ff8a00; box-shadow:0 3px 10px #ff8a00cc; }
+
+@media(max-width:480px){ body{padding:20px 10px;} .container{padding:20px 15px 30px 15px;} }
