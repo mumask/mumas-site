@@ -82,3 +82,29 @@ window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
 });
+
+const apps = document.querySelectorAll('.app');
+const mouse = { x: 0, y: 0 };
+
+// Detecta posição do mouse
+window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+});
+
+// Animação que reage aos ícones
+function animateIcons() {
+    apps.forEach(app => {
+        const rect = app.getBoundingClientRect();
+        const appX = rect.left + rect.width / 2;
+        const appY = rect.top + rect.height / 2;
+
+        const dist = Math.hypot(mouse.x - appX, mouse.y - appY);
+        const scale = Math.min(1.5, 1 + 0.005 * (100 - dist)); // aumenta quando perto
+        app.style.transform = `scale(${scale})`;
+    });
+
+    requestAnimationFrame(animateIcons);
+}
+
+animateIcons();
