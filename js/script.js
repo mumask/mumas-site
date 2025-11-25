@@ -1,110 +1,78 @@
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas.getContext('2d');
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
-
-let paused = false;
-const pauseBtn = document.getElementById('pauseBtn');
-pauseBtn.addEventListener('click', () => {
-    paused = !paused;
-    pauseBtn.textContent = paused ? 'Resume' : 'Pause';
-});
-
-// Pontos do fundo animado
-const points = [];
-const numPointsX = 25;
-const numPointsY = 15;
-const spacingX = width / (numPointsX - 1);
-const spacingY = height / (numPointsY - 1);
-
-// Inicializa os pontos
-for (let y = 0; y < numPointsY; y++) {
-    for (let x = 0; x < numPointsX; x++) {
-        points.push({
-            x: x * spacingX,
-            y: y * spacingY,
-            baseX: x * spacingX,
-            baseY: y * spacingY,
-            angle: Math.random() * Math.PI * 2,
-            speed: 0.01 + Math.random() * 0.02,
-            amplitude: 5 + Math.random() * 10
-        });
-    }
+// Clock
+function updateClock(){
+  const clock=document.getElementById('clock');
+  const now=new Date();
+  let h=now.getHours(), m=now.getMinutes(), s=now.getSeconds();
+  h=h<10?'0'+h:h; m=m<10?'0'+m:m; s=s<10?'0'+s:s;
+  clock.textContent=`${h}:${m}:${s}`;
 }
+setInterval(updateClock,1000); updateClock();
 
-// Desenha linhas conectando os pontos
-function drawLines() {
-    for (let y = 0; y < numPointsY - 1; y++) {
-        for (let x = 0; x < numPointsX - 1; x++) {
-            const p1 = points[y * numPointsX + x];
-            const p2 = points[y * numPointsX + x + 1];
-            const p3 = points[(y + 1) * numPointsX + x];
-
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = 'rgba(0,150,255,0.4)';
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p3.x, p3.y);
-            ctx.strokeStyle = 'rgba(0,150,255,0.4)';
-            ctx.stroke();
-        }
-    }
-}
-
-// Atualiza posição dos pontos
-function updatePoints() {
-    points.forEach(p => {
-        p.angle += p.speed;
-        p.x = p.baseX + Math.sin(p.angle) * p.amplitude;
-        p.y = p.baseY + Math.cos(p.angle) * p.amplitude;
+// Accordion
+document.querySelectorAll('.accordion-header').forEach(header=>{
+  header.addEventListener('click',()=>{
+    const content=header.nextElementSibling;
+    const arrow=header.querySelector('.accordion-arrow');
+    const isOpen=content.classList.contains('open');
+    document.querySelectorAll('.accordion-content.open').forEach(c=>{
+      if(c!==content){ c.classList.remove('open'); c.previousElementSibling.querySelector('.accordion-arrow').classList.remove('open'); }
     });
+    if(isOpen){ content.classList.remove('open'); arrow.classList.remove('open'); }
+    else{ content.classList.add('open'); arrow.classList.add('open'); }
+  });
+  header.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); header.click(); } });
+});
+
+// Fundo animado simples
+const canvas=document.getElementById('bg');
+const ctx=canvas.getContext('2d');
+let w=canvas.width=window.innerWidth;
+let h=canvas.height=window.innerHeight;
+let mouse={x:w/2,y:h/2};
+
+window.addEventListener('resize',()=>{ w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; });
+window.addEventListener('mousemove',e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+
+const particles=[];
+for(let i=0;i<150;i++){
+  particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,speed:Math.random()*0.5+0.2});
 }
 
-function animate() {
-    if (!paused) {
-        ctx.fillStyle = 'rgba(0,0,0,0.1)';
-        ctx.fillRect(0, 0, width, height);
-
-        updatePoints();
-        drawLines();
+function drawFluid(time){
+  ctx.clearRect(0,0,w,h);
+  for(let i=0;i<h;i+=4){
+    const grad=ctx.createLinearGradient(0,i,w,i+4);
+    const color1=`hsl(${(i+time*0.05)%360},80%,50%)`;
+    const color2=`hsl(${(i+time*0.05+40)%360},80%,50%)`;
+    grad.addColorStop(0,color1);
+    grad.addColorStop(1,color2);
+    ctx.fillStyle=grad;
+    ctx.beginPath();
+    for(let x=0;x<w;x+=5){
+      const y=i+Math.sin((x*0.01)+(time*0.002)+(i*0.05))*10;
+      ctx.lineTo(x,y);
     }
+    ctx.lineTo(w,h);
+    ctx.lineTo(0,h);
+    ctx.closePath();
+    ctx.fill();
+  }
 
-    requestAnimationFrame(animate);
+  // partículas
+  particles.forEach(p=>{
+    const hue=(p.x+p.y+time*0.05)%360;
+    ctx.fillStyle=`hsl(${hue},80%,60%)`;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+    p.y+=p.speed;
+    if(p.y>h) p.y=0;
+  });
+  requestAnimationFrame(()=>drawFluid(time+1));
 }
+drawFluid(0);
 
-animate();
-
-window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-});
-
-const apps = document.querySelectorAll('.app');
-const mouse = { x: 0, y: 0 };
-
-// Detecta posição do mouse
-window.addEventListener('mousemove', e => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-});
-
-// Animação que reage aos ícones
-function animateIcons() {
-    apps.forEach(app => {
-        const rect = app.getBoundingClientRect();
-        const appX = rect.left + rect.width / 2;
-        const appY = rect.top + rect.height / 2;
-
-        const dist = Math.hypot(mouse.x - appX, mouse.y - appY);
-        const scale = Math.min(1.5, 1 + 0.005 * (100 - dist)); // aumenta quando perto
-        app.style.transform = `scale(${scale})`;
-    });
-
-    requestAnimationFrame(animateIcons);
-}
-
-animateIcons();
+// Música de fundo
+const music=document.getElementById('bg-music');
+music.volume=0.2;
+music.play().catch(()=>{});
