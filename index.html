@@ -22,10 +22,8 @@
       min-height: 100vh;
       overflow: hidden;
       position: relative;
-      cursor: crosshair;
     }
     
-    /* Canvas fluido de fundo */
     #fluidCanvas {
       position: fixed;
       top: 0;
@@ -33,54 +31,103 @@
       width: 100%;
       height: 100%;
       z-index: 0;
+      cursor: crosshair;
     }
     
-    /* Controles do Jogo */
-    .game-controls {
+    .help-button {
       position: fixed;
       bottom: 20px;
       left: 20px;
       z-index: 100;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      pointer-events: all;
-    }
-    
-    .control-row {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-    
-    .control-btn {
       width: 50px;
       height: 50px;
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s;
+      pointer-events: all;
+      font-size: 1.8rem;
       color: #fff;
-      font-size: 1.2rem;
       font-weight: bold;
-      user-select: none;
     }
     
-    .control-btn:hover {
+    .help-button:hover {
       background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.05);
+      transform: scale(1.1);
     }
     
-    .control-btn:active {
-      transform: scale(0.95);
+    .tutorial-card {
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      width: 320px;
+      background: rgba(20, 20, 20, 0.95);
+      backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 25px;
+      z-index: 99;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
-    /* Player de Música */
+    .tutorial-card.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+    
+    .tutorial-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .tutorial-section {
+      margin-bottom: 15px;
+    }
+    
+    .tutorial-section h3 {
+      font-size: 0.9rem;
+      color: #999;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .tutorial-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .control-key {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .tutorial-text {
+      color: #ccc;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    
     .music-player {
       position: fixed;
       bottom: 20px;
@@ -88,18 +135,38 @@
       z-index: 100;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       cursor: pointer;
       transition: transform 0.3s;
+      pointer-events: all;
     }
     
     .music-player:hover {
       transform: scale(1.05);
     }
     
+    /* Relógio */
+    .clock {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 20px;
+      border-radius: 15px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      font-family: 'Courier New', monospace;
+    }
+    
     .vinyl {
-      width: 45px;
-      height: 45px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       background: radial-gradient(circle, #1a1a1a 30%, #333 30%, #1a1a1a 31%, #2a2a2a 50%, #1a1a1a 51%);
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
@@ -118,8 +185,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 12px;
-      height: 12px;
+      width: 15px;
+      height: 15px;
       background: #000;
       border-radius: 50%;
       box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2);
@@ -131,14 +198,14 @@
     }
     
     .album-cover {
-      width: 45px;
-      height: 45px;
-      border-radius: 6px;
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
       object-fit: cover;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
     
-    /* Menu de Apps */
     .menu-button {
       position: fixed;
       top: 30px;
@@ -196,21 +263,21 @@
       top: 8px;
     }
     
-    /* Menu Lateral */
     .side-menu {
       position: fixed;
       top: 0;
-      left: -350px;
-      width: 320px;
+      left: -400px;
+      width: 360px;
       height: 100vh;
-      background: rgba(20, 20, 20, 0.95);
-      backdrop-filter: blur(30px);
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 15, 25, 0.98);
+      backdrop-filter: blur(40px);
+      border-right: 1px solid rgba(255, 255, 255, 0.15);
       z-index: 99;
       transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       overflow-y: auto;
-      padding: 100px 30px 30px 30px;
+      padding: 100px 35px 35px 35px;
       pointer-events: all;
+      box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
     }
     
     .side-menu.active {
@@ -218,58 +285,79 @@
     }
     
     .menu-greeting {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 700;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      letter-spacing: -0.5px;
     }
     
     .menu-subtitle {
-      color: #999;
-      font-size: 0.9rem;
-      margin-bottom: 40px;
+      color: #aaa;
+      font-size: 1rem;
+      margin-bottom: 45px;
+      font-weight: 300;
     }
     
     .apps-menu {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 12px;
     }
     
     .app-link {
       display: flex;
       align-items: center;
-      gap: 20px;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 15px;
+      gap: 18px;
+      padding: 16px 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
       text-decoration: none;
-      transition: all 0.3s;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .app-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .app-link:hover::before {
+      left: 100%;
     }
     
     .app-link:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-      transform: translateX(10px);
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateX(8px) scale(1.02);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
     
     .app-link img {
-      width: 45px;
-      height: 45px;
-      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      border-radius: 13px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
     
     .app-link-name {
       color: #fff;
-      font-size: 1.1rem;
-      font-weight: 500;
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.2px;
     }
     
-    /* Overlay */
     .menu-overlay {
       position: fixed;
       top: 0;
@@ -288,7 +376,6 @@
       pointer-events: all;
     }
     
-    /* Container principal */
     .container {
       position: relative;
       z-index: 1;
@@ -306,14 +393,7 @@
       background-clip: text;
       animation: fadeInDown 1s ease-out;
       filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
-      margin-bottom: 20px;
-    }
-    
-    .welcome-text {
-      font-size: 1.3rem;
-      color: #e0e0f0;
-      opacity: 0.9;
-      animation: fadeInUp 1s ease-out 0.2s backwards;
+      margin-top: -100px;
     }
     
     @keyframes fadeInDown {
@@ -327,23 +407,9 @@
       }
     }
     
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
     @media (max-width: 768px) {
       h1 {
         font-size: 2.5rem;
-      }
-      .welcome-text {
-        font-size: 1.1rem;
       }
       .side-menu {
         width: 280px;
@@ -351,7 +417,12 @@
         padding: 80px 20px 20px 20px;
       }
       .menu-greeting {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
+      }
+      .tutorial-card {
+        width: calc(100vw - 40px);
+        left: 20px;
+        right: 20px;
       }
     }
   </style>
@@ -359,7 +430,6 @@
 <body>
   <canvas id="fluidCanvas"></canvas>
   
-  <!-- Botão do Menu -->
   <div class="menu-button" id="menuButton">
     <div class="menu-icon">
       <span></span>
@@ -368,10 +438,8 @@
     </div>
   </div>
   
-  <!-- Overlay -->
   <div class="menu-overlay" id="menuOverlay"></div>
   
-  <!-- Menu Lateral -->
   <div class="side-menu" id="sideMenu">
     <div class="menu-greeting" id="menuGreeting">Bom dia, Murilo!</div>
     <div class="menu-subtitle">Seus apps favoritos</div>
@@ -403,35 +471,59 @@
     </div>
   </div>
   
-  <!-- Controles do Jogo -->
-  <div class="game-controls">
-    <div class="control-row">
-      <div class="control-btn" id="jumpBtn">↑</div>
+  <div class="help-button" id="helpButton">?</div>
+  
+  <div class="tutorial-card" id="tutorialCard">
+    <div class="tutorial-title">Como Jogar</div>
+    
+    <div class="tutorial-section">
+      <h3>Controles do Personagem</h3>
+      <div class="tutorial-controls">
+        <span class="control-key">← →</span>
+        <span class="control-key">A D</span>
+      </div>
+      <p class="tutorial-text">Mover para esquerda/direita</p>
+      
+      <div class="tutorial-controls">
+        <span class="control-key">↑</span>
+        <span class="control-key">W</span>
+        <span class="control-key">ESPAÇO</span>
+      </div>
+      <p class="tutorial-text">Pular</p>
     </div>
-    <div class="control-row">
-      <div class="control-btn" id="leftBtn">←</div>
-      <div class="control-btn" id="rightBtn">→</div>
+    
+    <div class="tutorial-section">
+      <h3>Poderes Especiais</h3>
+      <p class="tutorial-text">🎁 Colete os power-ups coloridos que aparecem pela tela!</p>
+      <p class="tutorial-text">⚡ Laranja = Velocidade<br>💜 Roxo = Super Pulo<br>💨 Ciano = Voar<br>🌸 Rosa = Gigante</p>
+      <p class="tutorial-text">Cada poder dura 5 segundos!</p>
+    </div>
+    
+    <div class="tutorial-section">
+      <h3>Mover Personagem</h3>
+      <p class="tutorial-text">🎯 Clique e segure no boneco para arrastá-lo. Jogue ele para cima e ele sai voando!</p>
+    </div>
+    
+    <div class="tutorial-section">
+      <h3>Explosões de Cores</h3>
+      <p class="tutorial-text">🎨 Clique em qualquer lugar da tela para criar explosões coloridas!</p>
     </div>
   </div>
   
-  <!-- Player de Música -->
   <div class="music-player" id="musicPlayer">
     <div class="vinyl" id="vinyl"></div>
-    <img src="https://i.scdn.co/image/ab67616d0000b273bc5a6e8bdc4d7c94c6b59aca" alt="Minecraft Album" class="album-cover">
+    <img src="https://upload.wikimedia.org/wikipedia/en/5/52/Minecraft_Volume_Alpha_cover.jpg" alt="Minecraft Album" class="album-cover" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'">
   </div>
   
   <audio id="audioPlayer" loop preload="auto">
-    <source src="https://archive.org/download/Minecraft_OST/Mice%20On%20Venus.mp3" type="audio/mpeg">
-    Seu navegador não suporta o elemento de áudio.
+    <source src="https://files.catbox.moe/1iiedj.mp3" type="audio/mpeg">
   </audio>
   
   <div class="container">
     <h1 id="greeting">Bom dia, Murilo!</h1>
-    <p class="welcome-text">Clique para criar arte</p>
   </div>
 
   <script>
-    // ======= Saudação Personalizada =======
     const greeting = document.getElementById('greeting');
     const menuGreeting = document.getElementById('menuGreeting');
     const hour = new Date().getHours();
@@ -444,7 +536,6 @@
     greeting.textContent = greetingText;
     menuGreeting.textContent = greetingText;
     
-    // ======= Menu Toggle =======
     const menuButton = document.getElementById('menuButton');
     const sideMenu = document.getElementById('sideMenu');
     const menuOverlay = document.getElementById('menuOverlay');
@@ -458,7 +549,13 @@
     menuButton.addEventListener('click', toggleMenu);
     menuOverlay.addEventListener('click', toggleMenu);
     
-    // ======= Simulação de Fluido =======
+    const helpButton = document.getElementById('helpButton');
+    const tutorialCard = document.getElementById('tutorialCard');
+    
+    helpButton.addEventListener('click', () => {
+      tutorialCard.classList.toggle('active');
+    });
+    
     const canvas = document.getElementById('fluidCanvas');
     const ctx = canvas.getContext('2d');
     
@@ -475,18 +572,18 @@
         this.particles = [];
         this.musicNotes = [];
         this.colors = [
-          { r: 147, g: 51, b: 234 },  // roxo
-          { r: 59, g: 130, b: 246 },  // azul
-          { r: 236, g: 72, b: 153 },  // rosa
-          { r: 34, g: 211, b: 238 },  // ciano
-          { r: 251, g: 146, b: 60 }   // laranja
+          { r: 147, g: 51, b: 234 },
+          { r: 59, g: 130, b: 246 },
+          { r: 236, g: 72, b: 153 },
+          { r: 34, g: 211, b: 238 },
+          { r: 251, g: 146, b: 60 }
         ];
         this.noteSymbols = ['♪', '♫', '♬', '♩', '♭', '♮', '♯'];
       }
       
       createMusicNote() {
         const playerPos = {
-          x: width - 60,
+          x: width - 65,
           y: height - 55
         };
         
@@ -498,7 +595,6 @@
           life: 0,
           maxLife: 100,
           symbol: this.noteSymbols[Math.floor(Math.random() * this.noteSymbols.length)],
-          color: this.colors[Math.floor(Math.random() * this.colors.length)],
           rotation: Math.random() * Math.PI * 2,
           rotationSpeed: (Math.random() - 0.5) * 0.1,
           alpha: 1
@@ -575,16 +671,15 @@
           ctx.fill();
         });
         
-        // Desenhar notas musicais
         this.musicNotes.forEach(n => {
           ctx.save();
           ctx.translate(n.x, n.y);
           ctx.rotate(n.rotation);
           ctx.font = '30px Arial';
-          ctx.fillStyle = `rgba(${n.color.r}, ${n.color.g}, ${n.color.b}, ${n.alpha})`;
+          ctx.fillStyle = `rgba(0, 0, 0, ${n.alpha * 0.6})`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.shadowColor = `rgba(${n.color.r}, ${n.color.g}, ${n.color.b}, 0.8)`;
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
           ctx.shadowBlur = 10;
           ctx.fillText(n.symbol, 0, 0);
           ctx.restore();
@@ -592,7 +687,194 @@
       }
     }
     
-    // ======= Sistema de Jogo de Plataforma =======
+    class Enemy {
+      constructor() {
+        this.width = 30;
+        this.height = 35;
+        this.x = Math.random() * width;
+        this.y = 50;
+        this.velocityX = (Math.random() - 0.5) * 3;
+        this.velocityY = 0;
+        this.gravity = 0.6;
+        this.speed = 2;
+        this.onGround = false;
+        this.health = 2;
+        this.dead = false;
+        this.direction = Math.random() > 0.5 ? 1 : -1;
+        this.walkTimer = 0;
+      }
+      
+      update(platforms) {
+        if(this.dead) return;
+        
+        this.velocityY += this.gravity;
+        
+        this.walkTimer += 0.1;
+        this.x += this.direction * this.speed;
+        this.y += this.velocityY;
+        
+        // Wrap around
+        if(this.x + this.width < 0) this.x = width;
+        if(this.x > width) this.x = -this.width;
+        
+        this.onGround = false;
+        if(this.y + this.height >= height) {
+          this.y = height - this.height;
+          this.velocityY = 0;
+          this.onGround = true;
+        }
+        
+        platforms.forEach(platform => {
+          if(this.x + 5 < platform.x + platform.width &&
+             this.x + this.width - 5 > platform.x &&
+             this.y + this.height > platform.y &&
+             this.y + this.height < platform.y + platform.height + 10) {
+            
+            if(this.velocityY > 0) {
+              this.y = platform.y - this.height;
+              this.velocityY = 0;
+              this.onGround = true;
+            }
+          }
+        });
+        
+        // Mudar direção aleatoriamente
+        if(Math.random() < 0.02) {
+          this.direction *= -1;
+        }
+      }
+      
+      draw() {
+        if(this.dead) return;
+        
+        // Corpo vermelho
+        ctx.fillStyle = '#ff4444';
+        ctx.fillRect(this.x + 5, this.y, 20, 22);
+        
+        // Cabeça
+        ctx.fillStyle = '#cc0000';
+        ctx.fillRect(this.x + 7, this.y - 8, 16, 10);
+        
+        // Olhos malvados
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(this.x + 10, this.y - 5, 3, 3);
+        ctx.fillRect(this.x + 17, this.y - 5, 3, 3);
+        ctx.fillStyle = '#000';
+        ctx.fillRect(this.x + 11, this.y - 4, 1, 2);
+        ctx.fillRect(this.x + 18, this.y - 4, 1, 2);
+        
+        // Pernas com animação
+        ctx.fillStyle = '#990000';
+        const legOffset = Math.sin(this.walkTimer) * 3;
+        ctx.fillRect(this.x + 8, this.y + 22, 5, 13 + legOffset);
+        ctx.fillRect(this.x + 17, this.y + 22, 5, 13 - legOffset);
+        
+        // Barra de vida
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillRect(this.x, this.y - 15, this.width, 4);
+        ctx.fillStyle = '#ff0000';
+        ctx.fillRect(this.x, this.y - 15, (this.width * this.health) / 2, 4);
+      }
+      
+      takeDamage() {
+        this.health--;
+        if(this.health <= 0) {
+          this.dead = true;
+          fluid.createSplat(this.x + this.width / 2, this.y + this.height / 2);
+        }
+      }
+      
+      checkCollisionWithPlayer(player) {
+        return this.x < player.x + player.width &&
+               this.x + this.width > player.x &&
+               this.y < player.y + player.height &&
+               this.y + this.height > player.y;
+      }
+    }
+    
+    class PowerUp {
+      constructor(type) {
+        this.type = type;
+        this.x = Math.random() * (width - 100) + 50;
+        this.y = Math.random() * (height * 0.6) + 50;
+        this.size = 25;
+        this.rotation = 0;
+        this.bobOffset = Math.random() * Math.PI * 2;
+        this.collected = false;
+        
+        switch(type) {
+          case 'speed':
+            this.color = { r: 251, g: 146, b: 60 };
+            this.symbol = '⚡';
+            break;
+          case 'jump':
+            this.color = { r: 147, g: 51, b: 234 };
+            this.symbol = '⬆';
+            break;
+          case 'fly':
+            this.color = { r: 34, g: 211, b: 238 };
+            this.symbol = '✨';
+            break;
+          case 'giant':
+            this.color = { r: 236, g: 72, b: 153 };
+            this.symbol = '⭐';
+            break;
+        }
+      }
+      
+      update() {
+        this.rotation += 0.02;
+        this.bobOffset += 0.05;
+      }
+      
+      draw() {
+        const yOffset = Math.sin(this.bobOffset) * 10;
+        
+        // Aura
+        ctx.save();
+        ctx.globalAlpha = 0.3;
+        const gradient = ctx.createRadialGradient(this.x, this.y + yOffset, 0, this.x, this.y + yOffset, this.size * 2);
+        gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.6)`);
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y + yOffset, this.size * 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        
+        // Círculo do power-up
+        ctx.save();
+        ctx.translate(this.x, this.y + yOffset);
+        ctx.rotate(this.rotation);
+        
+        ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.8)`;
+        ctx.beginPath();
+        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.strokeStyle = `rgba(255, 255, 255, 0.8)`;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        
+        // Símbolo
+        ctx.font = 'bold 24px Arial';
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.symbol, 0, 0);
+        
+        ctx.restore();
+      }
+      
+      checkCollision(player) {
+        const dx = this.x - (player.x + player.width / 2);
+        const dy = this.y - (player.y + player.height / 2);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        return distance < this.size + 20;
+      }
+    }
+    
     class Platform {
       constructor(x, y, width, height) {
         this.x = x;
@@ -603,11 +885,18 @@
       }
       
       draw() {
-        ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.6)`;
+        ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.4)`;
         ctx.fillRect(this.x, this.y, this.width, this.height);
+        
         ctx.strokeStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 1)`;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 3;
         ctx.strokeRect(this.x, this.y, this.width, this.height);
+        
+        const gradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.height);
+        gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.6)`);
+        gradient.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(this.x, this.y, this.width, this.height / 2);
       }
     }
     
@@ -616,91 +905,439 @@
         this.width = 30;
         this.height = 40;
         this.x = 100;
-        this.y = height - 200;
+        this.y = Math.min(height * 0.7, height - 150);
         this.velocityX = 0;
         this.velocityY = 0;
         this.speed = 5;
-        this.jumpPower = 12;
-        this.gravity = 0.5;
+        this.jumpPower = 15;
+        this.gravity = 0.6;
         this.onGround = false;
         this.facingRight = true;
+        this.isDragging = false;
+        this.dragOffsetX = 0;
+        this.dragOffsetY = 0;
+        this.rotation = 0;
+        this.targetRotation = 0;
+        this.squash = 1;
+        this.lastDragX = 0;
+        this.lastDragY = 0;
+        this.throwVelocityX = 0;
+        this.throwVelocityY = 0;
+        this.dragHistory = [];
+        
+        // Poderes
+        this.hasPower = false;
+        this.powerType = null;
+        this.powerColor = null;
+        this.powerParticles = [];
+        this.speedActive = false;
+        this.jumpActive = false;
+        this.flyActive = false;
+        this.giantActive = false;
+        
+        // Sistema de vida
+        this.health = 3;
+        this.maxHealth = 3;
+        this.invincible = false;
+        this.invincibleTimer = 0;
+        this.dead = false;
       }
       
       update(platforms) {
-        // Aplicar gravidade
+        if(this.dead) return;
+        
+        if(this.invincible) {
+          this.invincibleTimer--;
+          if(this.invincibleTimer <= 0) {
+            this.invincible = false;
+          }
+        }
+        
+        if(this.isDragging) {
+          this.velocityX = 0;
+          this.velocityY = 0;
+          
+          // Calcular rotação baseada no movimento do arraste
+          const dragVelX = this.x - this.lastDragX;
+          const dragVelY = this.y - this.lastDragY;
+          this.targetRotation = Math.atan2(dragVelY, dragVelX) * 0.3;
+          this.rotation += (this.targetRotation - this.rotation) * 0.15;
+          
+          // Efeito squash
+          this.squash = 0.9 + Math.abs(Math.sin(Date.now() * 0.01)) * 0.2;
+          
+          // Armazenar histórico para calcular velocidade de arremesso
+          this.dragHistory.push({ x: this.x, y: this.y, time: Date.now() });
+          if(this.dragHistory.length > 5) this.dragHistory.shift();
+          
+          this.lastDragX = this.x;
+          this.lastDragY = this.y;
+          return;
+        } else {
+          // Retornar à posição normal
+          this.rotation *= 0.85;
+          this.squash += (1 - this.squash) * 0.1;
+        }
+        
         this.velocityY += this.gravity;
         
-        // Atualizar posição
         this.x += this.velocityX;
         this.y += this.velocityY;
         
-        // Atrito
-        this.velocityX *= 0.9;
+        // Rotação durante o voo
+        if(!this.onGround && Math.abs(this.velocityX) > 2) {
+          this.rotation += this.velocityX * 0.02;
+        }
         
-        // Limites da tela
-        if(this.x < 0) this.x = 0;
-        if(this.x + this.width > width) this.x = width - this.width;
+        this.velocityX *= 0.98;
         
-        // Chão
+        // Wrap around - ultrapassar bordas
+        if(this.x + this.width < 0) {
+          this.x = width;
+        }
+        if(this.x > width) {
+          this.x = -this.width;
+        }
+        
         this.onGround = false;
         if(this.y + this.height >= height) {
           this.y = height - this.height;
           this.velocityY = 0;
           this.onGround = true;
+          this.rotation *= 0.7;
         }
         
-        // Colisão com plataformas
         platforms.forEach(platform => {
-          if(this.x < platform.x + platform.width &&
-             this.x + this.width > platform.x &&
-             this.y < platform.y + platform.height &&
-             this.y + this.height > platform.y) {
+          if(this.x + 5 < platform.x + platform.width &&
+             this.x + this.width - 5 > platform.x &&
+             this.y + this.height > platform.y &&
+             this.y + this.height < platform.y + platform.height + 10) {
             
-            // Colisão por cima
-            if(this.velocityY > 0 && this.y + this.height - this.velocityY <= platform.y) {
+            if(this.velocityY > 0) {
               this.y = platform.y - this.height;
               this.velocityY = 0;
               this.onGround = true;
+              this.rotation *= 0.7;
             }
           }
         });
+        
+        // Atualizar partículas de poder
+        this.powerParticles = this.powerParticles.filter(p => p.life < p.maxLife);
+        this.powerParticles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life++;
+          p.alpha = 1 - (p.life / p.maxLife);
+        });
+        
+        // Criar partículas de poder
+        if(this.hasPower && Math.random() > 0.7) {
+          this.createPowerParticle();
+        }
+      }
+      
+      createPowerParticle() {
+        this.powerParticles.push({
+          x: this.x + this.width / 2 + (Math.random() - 0.5) * 20,
+          y: this.y + this.height / 2 + (Math.random() - 0.5) * 20,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+          size: Math.random() * 4 + 2,
+          life: 0,
+          maxLife: 30,
+          alpha: 1
+        });
+      }
+      
+      activatePower(type) {
+        this.hasPower = true;
+        this.powerType = type;
+        
+        switch(type) {
+          case 'speed':
+            this.speed = 10;
+            this.powerColor = { r: 251, g: 146, b: 60 }; // Laranja
+            this.speedActive = true;
+            setTimeout(() => { 
+              this.speed = 5; 
+              this.speedActive = false;
+              this.checkPowersActive();
+            }, 5000);
+            break;
+          case 'jump':
+            this.jumpPower = 25;
+            this.powerColor = { r: 147, g: 51, b: 234 }; // Roxo
+            this.jumpActive = true;
+            setTimeout(() => { 
+              this.jumpPower = 15;
+              this.jumpActive = false;
+              this.checkPowersActive();
+            }, 5000);
+            break;
+          case 'fly':
+            this.gravity = 0.2;
+            this.powerColor = { r: 34, g: 211, b: 238 }; // Ciano
+            this.flyActive = true;
+            setTimeout(() => { 
+              this.gravity = 0.6;
+              this.flyActive = false;
+              this.checkPowersActive();
+            }, 5000);
+            break;
+          case 'giant':
+            this.width = 50;
+            this.height = 70;
+            this.powerColor = { r: 236, g: 72, b: 153 }; // Rosa
+            this.giantActive = true;
+            setTimeout(() => { 
+              this.width = 30;
+              this.height = 40;
+              this.giantActive = false;
+              this.checkPowersActive();
+            }, 5000);
+            break;
+        }
+      }
+      
+      checkPowersActive() {
+        if(!this.speedActive && !this.jumpActive && !this.flyActive && !this.giantActive) {
+          this.hasPower = false;
+          this.powerType = null;
+          this.powerColor = null;
+        } else {
+          // Definir cor baseada no poder ativo
+          if(this.speedActive) this.powerColor = { r: 251, g: 146, b: 60 };
+          else if(this.jumpActive) this.powerColor = { r: 147, g: 51, b: 234 };
+          else if(this.flyActive) this.powerColor = { r: 34, g: 211, b: 238 };
+          else if(this.giantActive) this.powerColor = { r: 236, g: 72, b: 153 };
+        }
+      }
+      
+      deactivatePower() {
+        this.hasPower = false;
+        this.powerType = null;
+        this.powerColor = null;
+        this.speed = 5;
+        this.jumpPower = 15;
+        this.gravity = 0.6;
+        this.width = 30;
+        this.height = 40;
+        this.speedActive = false;
+        this.jumpActive = false;
+        this.flyActive = false;
+        this.giantActive = false;
       }
       
       draw() {
+        if(this.dead) return;
+        
+        // Desenhar partículas de poder
+        if(this.hasPower) {
+          this.powerParticles.forEach(p => {
+            ctx.fillStyle = `rgba(${this.powerColor.r}, ${this.powerColor.g}, ${this.powerColor.b}, ${p.alpha})`;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+          });
+          
+          // Aura de poder
+          ctx.save();
+          ctx.globalAlpha = 0.3;
+          const gradient = ctx.createRadialGradient(
+            this.x + this.width / 2, 
+            this.y + this.height / 2, 
+            0, 
+            this.x + this.width / 2, 
+            this.y + this.height / 2, 
+            this.width
+          );
+          gradient.addColorStop(0, `rgba(${this.powerColor.r}, ${this.powerColor.g}, ${this.powerColor.b}, 0.5)`);
+          gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width * 1.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+        
+        ctx.save();
+        
+        const centerX = this.x + this.width / 2;
+        const centerY = this.y + this.height / 2;
+        
+        ctx.translate(centerX, centerY);
+        ctx.rotate(this.rotation);
+        ctx.scale(this.squash, 1 / this.squash);
+        
+        // Piscar quando invencível
+        if(this.invincible && Math.floor(this.invincibleTimer / 5) % 2 === 0) {
+          ctx.globalAlpha = 0.5;
+        }
+        
+        ctx.translate(-centerX, -centerY);
+        
+        // Brilho de poder no corpo
+        if(this.hasPower) {
+          ctx.shadowColor = `rgb(${this.powerColor.r}, ${this.powerColor.g}, ${this.powerColor.b})`;
+          ctx.shadowBlur = 15;
+        }
+        
         // Corpo
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(this.x + 5, this.y, 20, 25);
+        ctx.fillStyle = this.hasPower ? 
+          `rgba(255, 255, 255, 0.9)` : '#fff';
+        ctx.fillRect(this.x + 5, this.y, 20 * (this.width / 30), 25 * (this.height / 40));
         
         // Cabeça
         ctx.fillStyle = '#ffd1a3';
-        ctx.fillRect(this.x + 7, this.y - 8, 16, 10);
+        ctx.fillRect(this.x + 7 * (this.width / 30), this.y - 8 * (this.height / 40), 16 * (this.width / 30), 10 * (this.height / 40));
+        
+        ctx.shadowBlur = 0;
         
         // Olhos
         ctx.fillStyle = '#000';
-        if(this.facingRight) {
-          ctx.fillRect(this.x + 15, this.y - 5, 3, 3);
+        if(this.isDragging) {
+          ctx.fillRect(this.x + 10, this.y - 6, 4, 1);
+          ctx.fillRect(this.x + 11, this.y - 7, 2, 3);
+          ctx.fillRect(this.x + 16, this.y - 6, 4, 1);
+          ctx.fillRect(this.x + 17, this.y - 7, 2, 3);
         } else {
-          ctx.fillRect(this.x + 12, this.y - 5, 3, 3);
+          if(this.facingRight) {
+            ctx.fillRect(this.x + 15 * (this.width / 30), this.y - 5 * (this.height / 40), 3, 3);
+          } else {
+            ctx.fillRect(this.x + 12 * (this.width / 30), this.y - 5 * (this.height / 40), 3, 3);
+          }
         }
         
         // Pernas
-        ctx.fillStyle = '#4169e1';
-        ctx.fillRect(this.x + 8, this.y + 25, 6, 15);
-        ctx.fillRect(this.x + 16, this.y + 25, 6, 15);
+        ctx.fillStyle = this.hasPower && this.powerType === 'speed' ? 
+          `rgb(${this.powerColor.r}, ${this.powerColor.g}, ${this.powerColor.b})` : '#4169e1';
+        
+        if(this.isDragging) {
+          const swing = Math.sin(Date.now() * 0.005) * 3;
+          ctx.fillRect(this.x + 8 + swing, this.y + 25 * (this.height / 40), 6 * (this.width / 30), 15 * (this.height / 40));
+          ctx.fillRect(this.x + 16 - swing, this.y + 25 * (this.height / 40), 6 * (this.width / 30), 15 * (this.height / 40));
+        } else {
+          ctx.fillRect(this.x + 8, this.y + 25 * (this.height / 40), 6 * (this.width / 30), 15 * (this.height / 40));
+          ctx.fillRect(this.x + 16, this.y + 25 * (this.height / 40), 6 * (this.width / 30), 15 * (this.height / 40));
+        }
+        
+        ctx.restore();
+        
+        // Barra de vida
+        const barWidth = 40;
+        const barHeight = 5;
+        const barX = this.x + this.width / 2 - barWidth / 2;
+        const barY = this.y - 20;
+        
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillRect(barX, barY, barWidth, barHeight);
+        
+        const healthColor = this.health === 3 ? '#00ff00' : this.health === 2 ? '#ffff00' : '#ff0000';
+        ctx.fillStyle = healthColor;
+        ctx.fillRect(barX, barY, (barWidth * this.health) / this.maxHealth, barHeight);
+      }
+      
+      takeDamage() {
+        if(this.invincible || this.dead) return;
+        
+        this.health--;
+        this.invincible = true;
+        this.invincibleTimer = 60; // 1 segundo de invencibilidade
+        
+        if(this.health <= 0) {
+          this.die();
+        }
+      }
+      
+      die() {
+        this.dead = true;
+        fluid.createSplat(this.x + this.width / 2, this.y + this.height / 2);
+        setTimeout(() => this.respawn(), 2000);
+      }
+      
+      respawn() {
+        this.dead = false;
+        this.health = this.maxHealth;
+        this.x = 100;
+        this.y = Math.min(height * 0.7, height - 150);
+        this.velocityX = 0;
+        this.velocityY = 0;
+        this.invincible = true;
+        this.invincibleTimer = 90;
+        fluid.createSplat(this.x + this.width / 2, this.y + this.height / 2);
+      }
+      
+      isPointInside(x, y) {
+        return x >= this.x && x <= this.x + this.width &&
+               y >= this.y && y <= this.y + this.height;
+      }
+      
+      startDrag(mouseX, mouseY) {
+        this.isDragging = true;
+        this.dragOffsetX = mouseX - this.x;
+        this.dragOffsetY = mouseY - this.y;
+        this.lastDragX = this.x;
+        this.lastDragY = this.y;
+        this.dragHistory = [{ x: this.x, y: this.y, time: Date.now() }];
+      }
+      
+      drag(mouseX, mouseY) {
+        if(this.isDragging) {
+          this.x = mouseX - this.dragOffsetX;
+          this.y = mouseY - this.dragOffsetY;
+          
+          if(this.x < 0) this.x = 0;
+          if(this.x + this.width > width) this.x = width - this.width;
+          if(this.y < 0) this.y = 0;
+          if(this.y + this.height > height) this.y = height - this.height;
+        }
+      }
+      
+      stopDrag() {
+        if(this.isDragging && this.dragHistory.length > 1) {
+          // Calcular velocidade de arremesso
+          const first = this.dragHistory[0];
+          const last = this.dragHistory[this.dragHistory.length - 1];
+          const timeDiff = (last.time - first.time) / 1000;
+          
+          if(timeDiff > 0) {
+            this.velocityX = ((last.x - first.x) / timeDiff) * 0.3;
+            this.velocityY = ((last.y - first.y) / timeDiff) * 0.3;
+            
+            // Limitar velocidade máxima
+            const maxVel = 20;
+            if(Math.abs(this.velocityX) > maxVel) this.velocityX = maxVel * Math.sign(this.velocityX);
+            if(Math.abs(this.velocityY) > maxVel) this.velocityY = maxVel * Math.sign(this.velocityY);
+            
+            // Ativar câmera se jogou com força
+            const throwForce = Math.sqrt(this.velocityX * this.velocityX + this.velocityY * this.velocityY);
+            if(throwForce > 8) {
+              cameraFollowing = true;
+            }
+          }
+        }
+        
+        this.isDragging = false;
+        this.dragHistory = [];
       }
       
       moveLeft() {
-        this.velocityX = -this.speed;
-        this.facingRight = false;
+        if(!this.isDragging) {
+          this.velocityX = -this.speed;
+          this.facingRight = false;
+        }
       }
       
       moveRight() {
-        this.velocityX = this.speed;
-        this.facingRight = true;
+        if(!this.isDragging) {
+          this.velocityX = this.speed;
+          this.facingRight = true;
+        }
       }
       
       jump() {
-        if(this.onGround) {
+        if(this.onGround && !this.isDragging) {
           this.velocityY = -this.jumpPower;
         }
       }
@@ -708,52 +1345,148 @@
     
     const fluid = new FluidSimulation();
     const player = new Player();
+    const powerUps = [];
+    const enemies = [];
     
-    // Criar plataformas baseadas no tamanho da tela
+    // Spawnar inimigos
+    function spawnEnemy() {
+      enemies.push(new Enemy());
+    }
+    
+    // Criar inimigos iniciais
+    setInterval(() => {
+      if(enemies.filter(e => !e.dead).length < 5) {
+        spawnEnemy();
+      }
+    }, 5000);
+    
+    spawnEnemy();
+    spawnEnemy();
+    
+    // Sistema de câmera
+    let cameraX = 0;
+    let cameraY = 0;
+    let targetCameraX = 0;
+    let targetCameraY = 0;
+    const cameraSmoothing = 0.08;
+    let cameraFollowing = false;
+    
+    // Criar power-ups iniciais
+    function spawnPowerUp() {
+      const types = ['speed', 'jump', 'fly', 'giant'];
+      const type = types[Math.floor(Math.random() * types.length)];
+      powerUps.push(new PowerUp(type));
+    }
+    
+    // Spawnar power-ups periodicamente
+    setInterval(() => {
+      if(powerUps.filter(p => !p.collected).length < 3) {
+        spawnPowerUp();
+      }
+    }, 8000);
+    
+    // Criar alguns power-ups iniciais
+    spawnPowerUp();
+    spawnPowerUp();
+    
     function createPlatforms() {
+      const baseHeight = Math.min(height * 0.8, height - 100);
       return [
-        new Platform(150, height - 150, 200, 20),
-        new Platform(450, height - 250, 180, 20),
-        new Platform(80, height - 350, 150, 20),
-        new Platform(350, height - 450, 200, 20),
-        new Platform(600, height - 200, 160, 20),
-        new Platform(250, height - 550, 180, 20),
-        new Platform(550, height - 400, 140, 20)
+        new Platform(150, baseHeight, 200, 18),
+        new Platform(450, baseHeight - 120, 180, 18),
+        new Platform(80, baseHeight - 200, 150, 18),
+        new Platform(350, baseHeight - 280, 200, 18),
+        new Platform(600, baseHeight - 80, 160, 18),
+        new Platform(250, baseHeight - 360, 180, 18),
+        new Platform(550, baseHeight - 220, 140, 18),
+        new Platform(width - 250, baseHeight - 150, 170, 18)
       ];
     }
     
     let platforms = createPlatforms();
     
-    // Controles do teclado
     const keys = {};
     
     window.addEventListener('keydown', (e) => {
       keys[e.key] = true;
       
-      if(e.key === 'ArrowUp' || e.key === ' ' || e.key === 'w') {
+      if((e.key === 'ArrowUp' || e.key === ' ' || e.key === 'w' || e.key === 'W') && !player.isDragging) {
+        e.preventDefault();
         player.jump();
       }
+      
+      // Ativar poderes com teclas numéricas
+      if(e.key === '1') player.activatePower('speed');
+      if(e.key === '2') player.activatePower('jump');
+      if(e.key === '3') player.activatePower('fly');
+      if(e.key === '4') player.activatePower('giant');
     });
     
     window.addEventListener('keyup', (e) => {
       keys[e.key] = false;
     });
     
-    // Controles touch
-    document.getElementById('leftBtn').addEventListener('mousedown', () => keys['ArrowLeft'] = true);
-    document.getElementById('leftBtn').addEventListener('mouseup', () => keys['ArrowLeft'] = false);
-    document.getElementById('leftBtn').addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowLeft'] = true; });
-    document.getElementById('leftBtn').addEventListener('touchend', (e) => { e.preventDefault(); keys['ArrowLeft'] = false; });
+    let mouseDown = false;
+    let mouseX = 0;
+    let mouseY = 0;
     
-    document.getElementById('rightBtn').addEventListener('mousedown', () => keys['ArrowRight'] = true);
-    document.getElementById('rightBtn').addEventListener('mouseup', () => keys['ArrowRight'] = false);
-    document.getElementById('rightBtn').addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowRight'] = true; });
-    document.getElementById('rightBtn').addEventListener('touchend', (e) => { e.preventDefault(); keys['ArrowRight'] = false; });
+    canvas.addEventListener('mousedown', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      if(player.isPointInside(mouseX, mouseY)) {
+        player.startDrag(mouseX, mouseY);
+        mouseDown = true;
+      } else {
+        fluid.createSplat(mouseX, mouseY);
+      }
+    });
     
-    document.getElementById('jumpBtn').addEventListener('click', () => player.jump());
-    document.getElementById('jumpBtn').addEventListener('touchstart', (e) => { e.preventDefault(); player.jump(); });
+    canvas.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      if(mouseDown && player.isDragging) {
+        player.drag(mouseX, mouseY);
+      }
+    });
     
-    // Controle de áudio
+    canvas.addEventListener('mouseup', () => {
+      mouseDown = false;
+      player.stopDrag();
+    });
+    
+    canvas.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      mouseX = touch.clientX;
+      mouseY = touch.clientY;
+      
+      if(player.isPointInside(mouseX, mouseY)) {
+        e.preventDefault();
+        player.startDrag(mouseX, mouseY);
+        mouseDown = true;
+      } else {
+        e.preventDefault();
+        fluid.createSplat(mouseX, mouseY);
+      }
+    }, { passive: false });
+    
+    canvas.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      mouseX = touch.clientX;
+      mouseY = touch.clientY;
+      
+      if(mouseDown && player.isDragging) {
+        e.preventDefault();
+        player.drag(mouseX, mouseY);
+      }
+    }, { passive: false });
+    
+    canvas.addEventListener('touchend', () => {
+      mouseDown = false;
+      player.stopDrag();
+    });
+    
     const audio = document.getElementById('audioPlayer');
     const musicPlayer = document.getElementById('musicPlayer');
     const vinyl = document.getElementById('vinyl');
@@ -767,11 +1500,9 @@
         clearInterval(noteInterval);
         isPlaying = false;
       } else {
-        // Garantir que o áudio toque
         audio.play().then(() => {
           vinyl.classList.add('playing');
           isPlaying = true;
-          // Criar notas musicais periodicamente
           noteInterval = setInterval(() => {
             if(Math.random() > 0.3) {
               fluid.createMusicNote();
@@ -779,67 +1510,103 @@
           }, 300);
         }).catch(err => {
           console.log('Erro ao tocar áudio:', err);
-          alert('Clique novamente para tocar a música!');
         });
       }
     }
     
     musicPlayer.addEventListener('click', togglePlay);
     
-    // Eventos de clique
-    window.addEventListener('click', (e) => {
-      // Não criar splat se clicar no menu ou player
-      if(!e.target.closest('.side-menu') && 
-         !e.target.closest('.menu-button') && 
-         !e.target.closest('.music-player')) {
-        fluid.createSplat(e.clientX, e.clientY);
-      }
-    });
-    
-    // Eventos de toque
-    window.addEventListener('touchstart', (e) => {
-      if(!e.target.closest('.side-menu') && 
-         !e.target.closest('.menu-button') && 
-         !e.target.closest('.music-player')) {
-        e.preventDefault();
-        const touch = e.touches[0];
-        fluid.createSplat(touch.clientX, touch.clientY);
-      }
-    }, { passive: false });
-    
     function animate() {
-      // Controles contínuos
-      if(keys['ArrowLeft'] || keys['a']) player.moveLeft();
-      if(keys['ArrowRight'] || keys['d']) player.moveRight();
+      if(keys['ArrowLeft'] || keys['a'] || keys['A']) player.moveLeft();
+      if(keys['ArrowRight'] || keys['d'] || keys['D']) player.moveRight();
       
-      // Atualizar jogo
       player.update(platforms);
       
-      // Atualizar fluido
+      // Atualizar câmera APENAS quando jogador está voando
+      const playerSpeed = Math.sqrt(player.velocityX ** 2 + player.velocityY ** 2);
+      
+      if(cameraFollowing) {
+        targetCameraX = -(player.x + player.width / 2 - width / 2);
+        targetCameraY = -(player.y + player.height / 2 - height / 2);
+        
+        // Desativar câmera quando jogador parar
+        if(playerSpeed < 2 && player.onGround) {
+          cameraFollowing = false;
+        }
+      } else {
+        // Retornar ao centro
+        targetCameraX = 0;
+        targetCameraY = 0;
+      }
+      
+      cameraX += (targetCameraX - cameraX) * cameraSmoothing;
+      cameraY += (targetCameraY - cameraY) * cameraSmoothing;
+      
+      // Atualizar inimigos
+      enemies.forEach((enemy, index) => {
+        enemy.update(platforms);
+        
+        // Colisão com jogador
+        if(!enemy.dead && enemy.checkCollisionWithPlayer(player)) {
+          player.takeDamage();
+        }
+        
+        // Colisão com poderes do jogador (jogador grande mata inimigos)
+        if(!enemy.dead && player.giantActive && enemy.checkCollisionWithPlayer(player)) {
+          enemy.takeDamage();
+        }
+        
+        // Remover inimigos mortos há muito tempo
+        if(enemy.dead && Math.random() < 0.001) {
+          enemies.splice(index, 1);
+        }
+      });
+      
+      // Atualizar power-ups
+      powerUps.forEach((powerUp, index) => {
+        if(!powerUp.collected) {
+          powerUp.update();
+          
+          if(powerUp.checkCollision(player)) {
+            powerUp.collected = true;
+            player.activatePower(powerUp.type);
+            fluid.createSplat(powerUp.x, powerUp.y);
+            setTimeout(() => powerUps.splice(index, 1), 100);
+          }
+        }
+      });
+      
       fluid.update();
       fluid.draw();
       
-      // Desenhar plataformas
+      ctx.save();
+      ctx.translate(cameraX, cameraY);
+      
       platforms.forEach(p => p.draw());
       
-      // Desenhar jogador
+      powerUps.forEach(p => {
+        if(!p.collected) p.draw();
+      });
+      
+      enemies.forEach(e => e.draw());
+      
       player.draw();
+      
+      ctx.restore();
       
       requestAnimationFrame(animate);
     }
     
-    // Iniciar com tela preta
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, width, height);
     
     animate();
     
-    // Resize
     window.addEventListener('resize', () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
       platforms = createPlatforms();
-      player.y = height - 200; // Reposicionar jogador
+      player.y = Math.min(height * 0.7, height - 150);
     });
   </script>
 </body>
