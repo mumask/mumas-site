@@ -204,6 +204,7 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
       object-fit: cover;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: block;
     }
     
     .menu-button {
@@ -356,6 +357,17 @@
       font-size: 1.15rem;
       font-weight: 600;
       letter-spacing: -0.2px;
+      flex: 1;
+    }
+    
+    /* Personagem no menu */
+    .menu-character {
+      position: absolute;
+      width: 25px;
+      height: 35px;
+      pointer-events: none;
+      z-index: 1;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     .menu-overlay {
@@ -512,7 +524,7 @@
   
   <div class="music-player" id="musicPlayer">
     <div class="vinyl" id="vinyl"></div>
-    <img src="https://upload.wikimedia.org/wikipedia/en/5/52/Minecraft_Volume_Alpha_cover.jpg" alt="Minecraft Album" class="album-cover" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'">
+    <div class="album-cover"></div>
   </div>
   
   <audio id="audioPlayer" loop preload="auto">
@@ -548,6 +560,72 @@
     
     menuButton.addEventListener('click', toggleMenu);
     menuOverlay.addEventListener('click', toggleMenu);
+    
+    // ======= Personagem animado no menu =======
+    const menuCharacterCanvas = document.getElementById('menuCharacter');
+    if(menuCharacterCanvas) {
+      const menuCharCtx = menuCharacterCanvas.getContext('2d');
+      menuCharacterCanvas.width = 25;
+      menuCharacterCanvas.height = 35;
+      
+      let menuCharY = 150;
+      let menuCharTargetY = 150;
+      let menuCharWalkTimer = 0;
+      
+      function drawMenuCharacter() {
+        menuCharCtx.clearRect(0, 0, 25, 35);
+        
+        // Corpo branco
+        menuCharCtx.fillStyle = '#fff';
+        menuCharCtx.fillRect(4, 5, 17, 18);
+        
+        // Cabeça
+        menuCharCtx.fillStyle = '#ffd1a3';
+        menuCharCtx.fillRect(5, 0, 14, 7);
+        
+        // Olhos
+        menuCharCtx.fillStyle = '#000';
+        menuCharCtx.fillRect(12, 2, 2, 2);
+        
+        // Pernas com animação
+        menuCharCtx.fillStyle = '#4169e1';
+        const legOffset = Math.sin(menuCharWalkTimer) * 2;
+        menuCharCtx.fillRect(7, 23, 4, 12 + legOffset);
+        menuCharCtx.fillRect(14, 23, 4, 12 - legOffset);
+      }
+      
+      function updateMenuCharacter() {
+        if(!sideMenu.classList.contains('active')) {
+          requestAnimationFrame(updateMenuCharacter);
+          return;
+        }
+        
+        menuCharWalkTimer += 0.15;
+        menuCharY += (menuCharTargetY - menuCharY) * 0.1;
+        
+        menuCharacterCanvas.style.top = menuCharY + 'px';
+        menuCharacterCanvas.style.left = '20px';
+        
+        drawMenuCharacter();
+        requestAnimationFrame(updateMenuCharacter);
+      }
+      
+      // Detectar hover nos links do menu
+      const appsMenu = document.getElementById('appsMenu');
+      if(appsMenu) {
+        const appLinks = appsMenu.querySelectorAll('.app-link');
+        
+        appLinks.forEach((link, index) => {
+          link.addEventListener('mouseenter', () => {
+            const linkRect = link.getBoundingClientRect();
+            const menuRect = sideMenu.getBoundingClientRect();
+            menuCharTargetY = linkRect.top - menuRect.top + 10;
+          });
+        });
+      }
+      
+      updateMenuCharacter();
+    }
     
     const helpButton = document.getElementById('helpButton');
     const tutorialCard = document.getElementById('tutorialCard');
@@ -1348,6 +1426,86 @@
     const powerUps = [];
     const enemies = [];
     
+    // Apps flutuantes
+    class FloatingApp {
+      constructor(name, icon, url, x, y) {
+        this.name = name;
+        this.icon = icon;
+        this.url = url;
+        this.x = x;
+        this.y = y;
+        this.size = 60;
+        this.bobOffset = Math.random() * Math.PI * 2;
+        this.rotation = 0;
+      }
+      
+      update() {
+        this.bobOffset += 0.03;
+        this.rotation += 0.01;
+      }
+      
+      draw() {
+        const yOffset = Math.sin(this.bobOffset) * 8;
+        
+        ctx.save();
+        ctx.translate(this.x, this.y + yOffset);
+        ctx.rotate(this.rotation);
+        
+        // Sombra
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        ctx.shadowBlur = 15;
+        
+        // Fundo do app
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.beginPath();
+        ctx.roundRect(-this.size/2, -this.size/2, this.size, this.size, 12);
+        ctx.fill();
+        
+        // Borda brilhante
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.shadowBlur = 0;
+        
+        // Desenhar ícone (emoji como placeholder)
+        ctx.font = '30px Arial';
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.icon, 0, 0);
+        
+        ctx.restore();
+        
+        // Nome do app
+        ctx.save();
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 12px Arial';
+        ctx.textAlign = 'center';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+        ctx.shadowBlur = 4;
+        ctx.fillText(this.name, this.x, this.y + yOffset + this.size/2 + 20);
+        ctx.restore();
+      }
+      
+      checkCollision(player) {
+        const dx = this.x - (player.x + player.width / 2);
+        const dy = this.y - (player.y + player.height / 2);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        return distance < this.size;
+      }
+    }
+    
+    const floatingApps = [
+      new FloatingApp('WhatsApp', '💬', 'https://web.whatsapp.com', 150, 100),
+      new FloatingApp('TikTok', '🎵', 'https://www.tiktok.com', 300, 120),
+      new FloatingApp('Instagram', '📷', 'https://www.instagram.com', 450, 90),
+      new FloatingApp('Discord', '🎮', 'https://discord.com', 600, 110),
+      new FloatingApp('Spotify', '🎧', 'https://www.spotify.com', 750, 100),
+      new FloatingApp('YouTube', '▶️', 'https://www.youtube.com', 900, 120)
+    ];
+    
     // Spawnar inimigos
     function spawnEnemy() {
       enemies.push(new Enemy());
@@ -1576,11 +1734,26 @@
         }
       });
       
+      // Atualizar e verificar colisão com apps flutuantes
+      floatingApps.forEach(app => {
+        app.update();
+        
+        if(!player.dead && app.checkCollision(player)) {
+          // Abrir app em nova aba
+          window.open(app.url, '_blank');
+          // Efeito visual
+          fluid.createSplat(app.x, app.y);
+        }
+      });
+      
       fluid.update();
       fluid.draw();
       
       ctx.save();
       ctx.translate(cameraX, cameraY);
+      
+      // Desenhar apps flutuantes primeiro (no fundo)
+      floatingApps.forEach(app => app.draw());
       
       platforms.forEach(p => p.draw());
       
